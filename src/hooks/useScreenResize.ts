@@ -1,11 +1,11 @@
 "use client"
 
-import {useDispatch} from "react-redux";
 import {useEffect} from "react";
-import {setScreenSize} from "@/store/screenSlice";
+import {setScreenSize} from "@/store/slices/screenSlice";
+import {useAppDispatch} from "@/store/hooks";
 
 export const useScreenResize = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         const handleResize = () => {
