@@ -66,7 +66,21 @@ const TextType = ({
     return textColors[currentTextIndex % textColors.length];
   };
 
-  useEffect(() => {
+    useEffect(() => {
+        if (!displayedText) return;
+        setIsDeleting(true);
+        const timeout = setTimeout(() => {
+            setDisplayedText('');
+            setCurrentCharIndex(0);
+            setIsDeleting(false);
+            setCurrentTextIndex(0);
+        }, displayedText.length * deletingSpeed + 200);
+
+        return () => clearTimeout(timeout);
+    }, [text]);
+
+
+    useEffect(() => {
     if (!startOnVisible || !containerRef.current) return;
 
     const observer = new IntersectionObserver(

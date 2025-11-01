@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { toVw } from '@/utils/toVw';
 import { useTheme } from '@/hooks/useTheme';
+import TextType from "@/components/Reactbits/TextType";
 
 export default function DarkModeToggle() {
     const { theme, toggleTheme } = useTheme();
@@ -40,7 +41,11 @@ export default function DarkModeToggle() {
             onMouseLeave={() => setIsHovered(false)}
             aria-label="Toggle dark mode"
         >
-            <span>{theme}mode.</span>
+            <TextType
+                loop={false}
+                showCursor={false}
+                text={`${theme}mode.`}
+            />
         </button>
     );
 }

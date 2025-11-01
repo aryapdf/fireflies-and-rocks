@@ -46,8 +46,10 @@ export default function Page() {
             <main style={styles.main}>
                 <TextType
                     text={["Front end. web (developer)", "Back end. (developer)", ".Musician"]}
-                    typingSpeed={75}
+                    typingSpeed={60}
+                    deletingSpeed={40}
                     pauseDuration={2200}
+                    cursorBlinkDuration={0.4}
                     showCursor={true}
                     cursorCharacter="_"
                     style={{
