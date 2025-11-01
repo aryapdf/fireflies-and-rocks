@@ -1,66 +1,171 @@
-import Image from "next/image";
-import styles from "@/app/page.module.css";
+'use client';
+
+import { useState } from 'react';
+import { toVw } from '@/utils/toVw';
+import {useTheme} from "@/hooks/useTheme";
 
 export default function Page() {
+    const { theme, toggleTheme, isDark } = useTheme();
+
+    const styles = {
+        container: {
+            minHeight: '100vh',
+            backgroundColor: isDark ? '#000000' : '#ffffff',
+            color: isDark ? '#ffffff' : '#000000',
+            fontFamily: "'Courier New', monospace",
+            position: 'relative' as const,
+            transition: 'all 0.3s ease',
+            overflow: 'hidden',
+        },
+        header: {
+            position: 'fixed' as const,
+            top: 0,
+            left: 0,
+            right: 0,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: `${toVw(40)} ${toVw(60)}`,
+            zIndex: 100,
+        },
+        logo: {
+            fontSize: toVw(38),
+            fontWeight: 'bold' as const,
+            letterSpacing: '-0.05em',
+        },
+        headerRight: {
+            display: 'flex',
+            flexDirection: 'column' as const,
+            alignItems: 'flex-end',
+            gap: toVw(4),
+        },
+        service: {
+            fontSize: toVw(18),
+            textDecoration: 'underline',
+            textUnderlineOffset: toVw(4),
+        },
+        discount: {
+            fontSize: toVw(14),
+            opacity: 0.7,
+        },
+        sidebar: {
+            position: 'fixed' as const,
+            left: toVw(60),
+            top: '50%',
+            transform: 'translateY(-50%)',
+            display: 'flex',
+            flexDirection: 'column' as const,
+            gap: toVw(40),
+            zIndex: 100,
+        },
+        navLink: {
+            writingMode: 'vertical-rl' as const,
+            textOrientation: 'mixed' as const,
+            fontSize: toVw(14),
+            color: 'inherit',
+            textDecoration: 'none',
+            transition: 'opacity 0.3s ease',
+            letterSpacing: '0.1em',
+            cursor: 'pointer',
+        },
+        main: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: `0 ${toVw(120)}`,
+        },
+        title: {
+            fontSize: toVw(72),
+            fontWeight: 'normal' as const,
+            lineHeight: 1.4,
+            letterSpacing: '-0.02em',
+            margin: 0,
+        },
+        cursor: {
+            animation: 'blink 1s infinite',
+            display: 'inline-block',
+        },
+        darkModeToggle: {
+            position: 'fixed' as const,
+            bottom: toVw(40),
+            right: toVw(60),
+            background: 'transparent',
+            border: 'none',
+            color: 'inherit',
+            fontSize: toVw(14),
+            cursor: 'pointer',
+            fontFamily: "'Courier New', monospace",
+            transition: 'opacity 0.3s ease',
+            zIndex: 100,
+            display: 'flex',
+            alignItems: 'center',
+            gap: toVw(8),
+            writingMode: 'vertical-rl' as const,
+            textOrientation: 'mixed' as const,
+        },
+    };
+
+    const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+
     return (
-        <div className={styles.page}>
-            <main className={styles.main}>
-                <Image
-                    className={styles.logo}
-                    src="/next.svg"
-                    alt="Next.js logo"
-                    width={100}
-                    height={20}
-                    priority
-                />
-                <div className={styles.intro}>
-                    <h1>To get started, edit the page.tsx file.</h1>
-                    <p>
-                        Looking for a starting point or more instructions? Head over to{" "}
-                        <a
-                            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Templates
-                        </a>{" "}
-                        or the{" "}
-                        <a
-                            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Learning
-                        </a>{" "}
-                        center.
-                    </p>
+        <div style={styles.container}>
+            {/* Keyframe animation */}
+            <style jsx>{`
+        @keyframes blink {
+          0%, 50% { opacity: 1; }
+          51%, 100% { opacity: 0; }
+        }
+      `}</style>
+
+            {/* Header */}
+            <header style={styles.header}>
+                <div style={styles.logo}>mrk.</div>
+                <div style={styles.headerRight}>
+                    {/*<span style={styles.service}>self service</span>*/}
+                    {/*<span style={styles.discount}>20% OFF</span>*/}
                 </div>
-                <div className={styles.ctas}>
+            </header>
+
+            {/* Sidebar Navigation */}
+            <nav style={styles.sidebar}>
+                {['home', 'cases', 'projects', 'about me', 'contact'].map((item) => (
                     <a
-                        className={styles.primary}
-                        href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        key={item}
+                        href={`#${item.replace(' ', '-')}`}
+                        style={{
+                            ...styles.navLink,
+                            opacity: hoveredLink === item ? 0.6 : 1,
+                        }}
+                        onMouseEnter={() => setHoveredLink(item)}
+                        onMouseLeave={() => setHoveredLink(null)}
                     >
-                        <Image
-                            className={styles.logo}
-                            src="/vercel.svg"
-                            alt="Vercel logomark"
-                            width={16}
-                            height={16}
-                        />
-                        Deploy Now
+                        {item}
                     </a>
-                    <a
-                        className={styles.secondary}
-                        href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Documentation
-                    </a>
-                </div>
+                ))}
+            </nav>
+
+            {/* Main Content */}
+            <main style={styles.main}>
+                <h1 style={styles.title}>
+                    front-end. web (developer)<span style={styles.cursor}>_</span>
+                </h1>
             </main>
+
+            {/* Dark Mode Toggle */}
+            <button
+                style={{
+                    ...styles.darkModeToggle,
+                    opacity: hoveredLink === 'darkmode' ? 0.6 : 1,
+                }}
+                onClick={toggleTheme}
+                onMouseEnter={() => setHoveredLink('darkmode')}
+                onMouseLeave={() => setHoveredLink(null)}
+                aria-label="Toggle dark mode"
+            >
+                {/*<span>{isDark ? '☀️' : '🌙'}</span>*/}
+                <span>{theme} mode.</span>
+            </button>
         </div>
     );
 }
