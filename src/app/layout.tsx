@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {DotGothic16, Geist, Geist_Mono, Manrope} from "next/font/google";
 import "./globals.css";
 import StoreProvider from "@/providers/StoreProvider";
+import ThemeSync from "@/components/Theme/ThemeSync";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${manrope.variable} ${geistSans.variable} ${geistMono.variable} ${dotGothic16.variable}`}>
         <StoreProvider>
+          <ThemeSync />
           {children}
         </StoreProvider>
       </body>
