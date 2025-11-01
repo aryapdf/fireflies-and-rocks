@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { toVw } from '@/utils/toVw';
 import {useTheme} from "@/hooks/useTheme";
+import TextType from "@/components/Reactbits/TextType";
+import {fonts} from "@/utils/font";
 
 export default function Page() {
     const { theme, toggleTheme, isDark } = useTheme();
@@ -59,7 +61,7 @@ export default function Page() {
             zIndex: 100,
         },
         navLink: {
-            writingMode: 'vertical-rl' as const,
+            writingMode: 'sideways-lr' as const,
             textOrientation: 'mixed' as const,
             fontSize: toVw(14),
             color: 'inherit',
@@ -101,7 +103,7 @@ export default function Page() {
             display: 'flex',
             alignItems: 'center',
             gap: toVw(8),
-            writingMode: 'vertical-rl' as const,
+            writingMode: 'sideways-lr' as const,
             textOrientation: 'mixed' as const,
         },
     };
@@ -120,7 +122,7 @@ export default function Page() {
 
             {/* Header */}
             <header style={styles.header}>
-                <div style={styles.logo}>mrk.</div>
+                <div style={styles.logo}>badcable.</div>
                 <div style={styles.headerRight}>
                     {/*<span style={styles.service}>self service</span>*/}
                     {/*<span style={styles.discount}>20% OFF</span>*/}
@@ -147,13 +149,22 @@ export default function Page() {
 
             {/* Main Content */}
             <main style={styles.main}>
-                <h1 style={styles.title}>
-                    front-end. web (developer)<span style={styles.cursor}>_</span>
-                </h1>
+                <TextType
+                    text={["Front end. web (developer)", "Back end. (developer)", ".Musician"]}
+                    typingSpeed={75}
+                    pauseDuration={2200}
+                    showCursor={true}
+                    cursorCharacter="_"
+                    style={{
+                        fontFamily: fonts.dotGothic16,
+                        fontSize: toVw(40),
+                    }}
+                />
             </main>
 
             {/* Dark Mode Toggle */}
             <button
+                className={"font-bold"}
                 style={{
                     ...styles.darkModeToggle,
                     opacity: hoveredLink === 'darkmode' ? 0.6 : 1,
@@ -163,8 +174,7 @@ export default function Page() {
                 onMouseLeave={() => setHoveredLink(null)}
                 aria-label="Toggle dark mode"
             >
-                {/*<span>{isDark ? '☀️' : '🌙'}</span>*/}
-                <span>{theme} mode.</span>
+                <span>{theme}mode.</span>
             </button>
         </div>
     );
