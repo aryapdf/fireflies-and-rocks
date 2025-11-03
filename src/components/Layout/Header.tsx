@@ -29,12 +29,13 @@ export default function Header({ isDark }: HeaderProps) {
             display: 'flex',
             flexDirection: 'column' as const,
             alignItems: 'flex-end',
+            fontWeight: 700,
             gap: toVw(4),
         },
         service: {
             fontSize: toVw(18),
             textDecoration: 'underline',
-            textUnderlineOffset: toVw(4),
+            textUnderlineOffset: toVw(10),
         },
         discount: {
             fontSize: toVw(14),
@@ -46,7 +47,7 @@ export default function Header({ isDark }: HeaderProps) {
         <header style={styles.header}>
             <div style={styles.logo}>badcable.</div>
             <div style={styles.headerRight}>
-                <span style={styles.service}>self service</span>
+                <div><span style={styles.service}>se</span>lf service</div>
                 {/*<span style={styles.discount}>20% OFF</span>*/}
             </div>
         </header>
