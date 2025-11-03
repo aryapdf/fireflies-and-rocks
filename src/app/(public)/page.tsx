@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import { toVw } from '@/utils/toVw';
 import {useTheme} from "@/hooks/useTheme";
 import TextType from "@/components/Reactbits/TextType";
@@ -11,6 +11,7 @@ import DarkModeToggle from "@/components/Layout/DarkModeToggle";
 import { useGSAP } from "@gsap/react";
 import { gsap } from 'gsap';
 import {ScrollTrigger} from "gsap/ScrollTrigger";
+import Particles from "@/components/Reactbits/Particles";
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -21,13 +22,16 @@ export default function Page() {
     const [textIndex, setTextIndex] = useState<any>(0)
     const [isFrozen, setIsFrozen] = useState<boolean>(false)
 
-    const styles = {
+    const particleColorRef = useRef<any>(['#E7E7E7', '#E7E7E7'])
+
+    const styles:any = {
         container: {
             minHeight: '100vh',
+            width: '100vw',
             backgroundColor: isDark ? '#000000' : '#ffffff',
             color: isDark ? '#ffffff' : '#000000',
             fontFamily: "'Courier New', monospace",
-            position: 'relative' as const,
+            position: 'relative',
             transition: 'all 0.3s ease',
             overflow: 'hidden',
         },
@@ -46,6 +50,12 @@ export default function Page() {
             alignItems: 'center'
         }
     };
+
+    useEffect(() => {
+        particleColorRef.current = isDark
+            ? ['#E7E7E7', '#E7E7E7']
+            : ['#000000', '#000000'];
+    }, [isDark]);
 
     useGSAP(() => {
         const mainTimeline = gsap.timeline({
@@ -73,35 +83,64 @@ export default function Page() {
 
     return (
         <div style={styles.container}>
-            {/* Header */}
-            <Header />
+            {/* Background */}
+            <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: "100vh",
+                maxHeight: '100vh',
+                inset: -1
+            }}>
+                <Particles
+                    particleColors={particleColorRef.current || ['#000000']}
+                    particleCount={1000}
+                    particleSpread={10}
+                    speed={0.1}
+                    particleBaseSize={100}
+                    alphaParticles={false}
+                    disableRotation={false}
+                />
+            </div>
 
-            {/* Sidebar Navigation */}
-            <Sidebar />
+            <div
+                style={{
+                    position: 'relative',
+                    zIndex: 5
+                }}
+            >
+                {/* Header */}
+                <Header />
 
-            {/* Dark Mode Toggle */}
-            <DarkModeToggle />
+                {/* Sidebar Navigation */}
+                <Sidebar />
 
-            {/* Main Content */}
-            <main style={styles.main} id={"main-page"}>
-                <div style={styles.section} className={"main-text"}>
-                    <TextType
-                        text={jumboText}
-                        typingSpeed={60}
-                        deletingSpeed={40}
-                        pauseDuration={2200}
-                        cursorBlinkDuration={0.4}
-                        showCursor={true}
-                        cursorCharacter="_"
-                        freezeAnimation={isFrozen}
-                        setCurrentIndex={setTextIndex}
-                        style={{
-                            fontFamily: fonts.dotGothic16,
-                            fontSize: toVw(40),
-                        }}
-                    />
-                </div>
-            </main>
+                {/* Dark Mode Toggle */}
+                <DarkModeToggle />
+
+                {/* Main Content */}
+                <main style={styles.main} id={"main-page"}>
+                    <div style={styles.section} className={"main-text"}>
+                        <TextType
+                            text={jumboText}
+                            typingSpeed={60}
+                            deletingSpeed={40}
+                            pauseDuration={2200}
+                            cursorBlinkDuration={0.4}
+                            showCursor={true}
+                            cursorCharacter="_"
+                            freezeAnimation={isFrozen}
+                            setCurrentIndex={setTextIndex}
+                            style={{
+                                fontFamily: fonts.dotGothic16,
+                                fontSize: toVw(40),
+                            }}
+                        />
+                    </div>
+                </main>
+            </div>
+
         </div>
     );
 }
