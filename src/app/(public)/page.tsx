@@ -37,6 +37,7 @@ export default function Page() {
         },
         main: {
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             minHeight: '100vh',
@@ -77,75 +78,68 @@ export default function Page() {
     useGSAP(() => {
         const particlesObj = { x: 0, y: 0, z: 0 };
 
-        // === Timeline utama untuk teks dan freeze effect ===
-        const mainTimeline = gsap.timeline({
+        // === TIMELINE UTAMA ===
+        const mainTL = gsap.timeline({
             scrollTrigger: {
                 trigger: '#main-page',
                 start: 'top top',
-                end: '+=200%',
+                end: '+=400%',
                 scrub: true,
                 pin: true,
-                markers: true,
+                markers: true
             },
             defaults: { ease: 'power3.inOut' }
         });
 
-        mainTimeline
-            .to('#main-page', { opacity: 1, scale: 1, duration: 1 })
+        // === TIMELINE ANAK #1 === (animasi teks)
+        const textTL = gsap.timeline()
             .to('.main-text', {
-                duration: 0.7,
-                onComplete: () => setIsFrozen(true),
-                onReverseComplete: () => setIsFrozen(false)
+                opacity: 1,
+                duration: 5
             })
-            .to('.main-text', { opacity: 0, duration: 1 });
+            .to('.main-text', {
+                opacity: 0,
+                duration: 2
+            });
 
-        // === Timeline kedua khusus untuk animasi partikel ===
-        const particleTimeline = gsap.timeline({
-            scrollTrigger: {
-                trigger: '#main-page',
-                start: 'center center',
-                end: '+=100%',
-                scrub: 1.2,
-                markers: true,
-            }
-        });
-
-        particleTimeline.to(particlesObj, {
-            x: 8,
-            duration: 2,
-            ease: 'power3.inOut',
-            onUpdate: () => {
-                if (particlesRef.current) {
-                    particlesRef.current.setPosition(particlesObj.x, particlesObj.y, particlesObj.z);
+        // === TIMELINE ANAK #2 === (animasi partikel)
+        const particleTL = gsap.timeline()
+            .to(particlesObj, {
+                x: 10,
+                duration: 5,
+                ease: 'power2.inOut',
+                onUpdate: () => {
+                    if (particlesRef.current) {
+                        particlesRef.current.setPosition(particlesObj.x, particlesObj.y, particlesObj.z);
+                    }
                 }
-            },
-        });
+            })
 
-        // === Timeline ketiga untuk reveal section berikutnya ===
-        const nextSectionTimeline = gsap.timeline({
-            scrollTrigger: {
-                trigger: '#next-section',
-                start: 'top bottom',
-                end: 'top center',
-                scrub: 1.2,
-                markers: true,
-            },
-        });
+        // === TIMELINE ANAK #3 === (reveal section berikutnya)
+        const nextSectionTL = gsap.timeline()
+            .to('#next-section', {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: 'power3.out'
+            });
 
-        nextSectionTimeline.to('#next-section', {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            ease: 'power3.out',
-        });
+        // === COMPOSE: Masukkan sub-timeline ke dalam master timeline ===
+        mainTL
+            .add(textTL, 'text')         // label opsional
+            .add(particleTL, 'particles') // bisa juga offset: '>-0.5' atau '<+0.2'
+            .add(nextSectionTL, '+=0.5'); // jeda 0.5 detik setelah animasi sebelumnya
 
+        // === Cleanup ===
         return () => {
-            mainTimeline.kill();
-            particleTimeline.kill();
-            nextSectionTimeline.kill();
+            mainTL.kill();
+            textTL.kill();
+            particleTL.kill();
+            nextSectionTL.kill();
             ScrollTrigger.getAll().forEach(st => st.kill());
         };
     });
+
 
 
     return (
@@ -178,7 +172,7 @@ export default function Page() {
 
                 {/* Main Content */}
                 <main style={styles.main} id={"main-page"}>
-                    <div style={styles.section} className={"main-text"}>
+                    <section style={styles.section} className={"main-text"}>
                         <TextType
                             text={jumboText}
                             typingSpeed={60}
@@ -194,30 +188,34 @@ export default function Page() {
                                 fontSize: toVw(40),
                             }}
                         />
-                    </div>
+                    </section>
+
+                    {/* New Section - fades in after particles */}
+                    <section
+                        id="next-section"
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            opacity: 0,
+                            transform: 'translateY(50px)',
+                            minHeight: '100vh',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            transition: 'opacity 1s ease, transform 1s ease',
+                        }}
+                    >
+                        <h2 style={{
+                            fontFamily: fonts.dotGothic16,
+                            fontSize: toVw(30),
+                            textAlign: 'center',
+                        }}>
+                            Welcome to the next section 🚀
+                        </h2>
+                    </section>
                 </main>
 
-                {/* New Section - fades in after particles */}
-                <section
-                    id="next-section"
-                    style={{
-                        opacity: 0,
-                        transform: 'translateY(50px)',
-                        minHeight: '100vh',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        transition: 'opacity 1s ease, transform 1s ease',
-                    }}
-                >
-                    <h2 style={{
-                        fontFamily: fonts.dotGothic16,
-                        fontSize: toVw(30),
-                        textAlign: 'center',
-                    }}>
-                        Welcome to the next section 🚀
-                    </h2>
-                </section>
+
             </div>
         </div>
     );
