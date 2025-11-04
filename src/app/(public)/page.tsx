@@ -63,8 +63,8 @@ export default function Page() {
         },
         particles: {
             position: 'absolute',
-            width: '200vw',
-            height: '200vh',
+            width: '300vw',
+            height: '150vh',
         }
     };
 
@@ -77,52 +77,87 @@ export default function Page() {
     useGSAP(() => {
         const particlesObj = { x: 0, y: 0, z: 0 };
 
+        // === Timeline utama untuk teks dan freeze effect ===
         const mainTimeline = gsap.timeline({
             scrollTrigger: {
-                markers: true,
-                start: "top top",
+                trigger: '#main-page',
+                start: 'top top',
                 end: '+=200%',
                 scrub: true,
-                pin: '#main-page',
-                trigger: '#main-page'
+                pin: true,
+                markers: true,
             },
-            defaults: {
-                ease: "power2.out"
-            }
-        })
-            .to('#main-page', {opacity: 1, scale: 1, duration: 1})
-            .to('.main-text', {duration: .5, onComplete: () => setIsFrozen(true), onReverseComplete: () => setIsFrozen(false) })
-            .to('.main-text', {opacity: 0, duration: 1})
+            defaults: { ease: 'power3.inOut' }
+        });
 
-            .to(particlesObj, {
-                x: 3, // Reduced from 15 to 3
-                duration: 0.3,
-                ease: "sine.inOut",
-                onUpdate: () => {
-                    if (particlesRef.current) {
-                        particlesRef.current.setPosition(particlesObj.x, particlesObj.y, particlesObj.z);
-                    }
-                }
+        mainTimeline
+            .to('#main-page', { opacity: 1, scale: 1, duration: 1 })
+            .to('.main-text', {
+                duration: 0.7,
+                onComplete: () => setIsFrozen(true),
+                onReverseComplete: () => setIsFrozen(false)
             })
+            .to('.main-text', { opacity: 0, duration: 1 });
+
+        // === Timeline kedua khusus untuk animasi partikel ===
+        const particleTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#main-page',
+                start: 'center center',
+                end: '+=100%',
+                scrub: 1.2,
+                markers: true,
+            }
+        });
+
+        particleTimeline.to(particlesObj, {
+            x: 8,
+            duration: 2,
+            ease: 'power3.inOut',
+            onUpdate: () => {
+                if (particlesRef.current) {
+                    particlesRef.current.setPosition(particlesObj.x, particlesObj.y, particlesObj.z);
+                }
+            },
+        });
+
+        // === Timeline ketiga untuk reveal section berikutnya ===
+        const nextSectionTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#next-section',
+                start: 'top bottom',
+                end: 'top center',
+                scrub: 1.2,
+                markers: true,
+            },
+        });
+
+        nextSectionTimeline.to('#next-section', {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out',
+        });
 
         return () => {
             mainTimeline.kill();
-            ScrollTrigger.getAll().forEach(st => st.kill())
-        }
-    })
+            particleTimeline.kill();
+            nextSectionTimeline.kill();
+            ScrollTrigger.getAll().forEach(st => st.kill());
+        };
+    });
+
 
     return (
         <div style={styles.container}>
             {/* Background */}
             <div style={styles.backgroundContainer}>
-                <div
-                    style={styles.particles}
-                >
+                <div style={styles.particles}>
                     <Particles
                         ref={particlesRef}
                         particleColors={particleColor}
                         particleCount={5000}
-                        particleSpread={10}
+                        particleSpread={15}
                         speed={0.1}
                         particleBaseSize={100}
                         alphaParticles={false}
@@ -131,12 +166,7 @@ export default function Page() {
                 </div>
             </div>
 
-            <div
-                style={{
-                    position: 'relative',
-                    zIndex: 5
-                }}
-            >
+            <div style={{ position: 'relative', zIndex: 5 }}>
                 {/* Header */}
                 <Header />
 
@@ -166,8 +196,29 @@ export default function Page() {
                         />
                     </div>
                 </main>
-            </div>
 
+                {/* New Section - fades in after particles */}
+                <section
+                    id="next-section"
+                    style={{
+                        opacity: 0,
+                        transform: 'translateY(50px)',
+                        minHeight: '100vh',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        transition: 'opacity 1s ease, transform 1s ease',
+                    }}
+                >
+                    <h2 style={{
+                        fontFamily: fonts.dotGothic16,
+                        fontSize: toVw(30),
+                        textAlign: 'center',
+                    }}>
+                        Welcome to the next section 🚀
+                    </h2>
+                </section>
+            </div>
         </div>
     );
 }
