@@ -31,9 +31,9 @@ export default function Header({ isDark }: HeaderProps) {
             alignItems: 'flex-end',
             fontWeight: 700,
             gap: toVw(4),
+            fontSize: toVw(18),
         },
         service: {
-            fontSize: toVw(18),
             textDecoration: 'underline',
             textUnderlineOffset: toVw(10),
         },
