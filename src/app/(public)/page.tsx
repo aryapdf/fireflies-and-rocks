@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import { toVw } from '@/utils/toVw';
 import {useTheme} from "@/hooks/useTheme";
 import TextType from "@/components/Reactbits/TextType";
@@ -11,7 +11,7 @@ import DarkModeToggle from "@/components/Layout/DarkModeToggle";
 import { useGSAP } from "@gsap/react";
 import { gsap } from 'gsap';
 import {ScrollTrigger} from "gsap/ScrollTrigger";
-import Particles from "@/components/Reactbits/Particles";
+import Particles, { ParticlesRef } from "@/components/Reactbits/Particles";
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -22,7 +22,7 @@ export default function Page() {
     const [textIndex, setTextIndex] = useState<any>(0)
     const [isFrozen, setIsFrozen] = useState<boolean>(false)
 
-    const particleColorRef = useRef<any>(['#E7E7E7', '#E7E7E7'])
+    const particlesRef = useRef<ParticlesRef>(null);
 
     const styles:any = {
         container: {
@@ -48,16 +48,35 @@ export default function Page() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center'
+        },
+        backgroundContainer: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: "100vh",
+            maxHeight: '100vh',
+            inset: -1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        particles: {
+            position: 'absolute',
+            width: '200vw',
+            height: '200vh',
         }
     };
 
-    useEffect(() => {
-        particleColorRef.current = isDark
+    const particleColor = useMemo(() => {
+        return isDark
             ? ['#E7E7E7', '#E7E7E7']
             : ['#000000', '#000000'];
     }, [isDark]);
 
     useGSAP(() => {
+        const particlesObj = { x: 0, y: 0, z: 0 };
+
         const mainTimeline = gsap.timeline({
             scrollTrigger: {
                 markers: true,
@@ -75,6 +94,17 @@ export default function Page() {
             .to('.main-text', {duration: .5, onComplete: () => setIsFrozen(true), onReverseComplete: () => setIsFrozen(false) })
             .to('.main-text', {opacity: 0, duration: 1})
 
+            .to(particlesObj, {
+                x: 3, // Reduced from 15 to 3
+                duration: 0.3,
+                ease: "sine.inOut",
+                onUpdate: () => {
+                    if (particlesRef.current) {
+                        particlesRef.current.setPosition(particlesObj.x, particlesObj.y, particlesObj.z);
+                    }
+                }
+            })
+
         return () => {
             mainTimeline.kill();
             ScrollTrigger.getAll().forEach(st => st.kill())
@@ -84,24 +114,21 @@ export default function Page() {
     return (
         <div style={styles.container}>
             {/* Background */}
-            <div style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100vw',
-                height: "100vh",
-                maxHeight: '100vh',
-                inset: -1
-            }}>
-                <Particles
-                    particleColors={particleColorRef.current || ['#000000']}
-                    particleCount={1000}
-                    particleSpread={10}
-                    speed={0.1}
-                    particleBaseSize={100}
-                    alphaParticles={false}
-                    disableRotation={false}
-                />
+            <div style={styles.backgroundContainer}>
+                <div
+                    style={styles.particles}
+                >
+                    <Particles
+                        ref={particlesRef}
+                        particleColors={particleColor}
+                        particleCount={5000}
+                        particleSpread={10}
+                        speed={0.1}
+                        particleBaseSize={100}
+                        alphaParticles={false}
+                        disableRotation={false}
+                    />
+                </div>
             </div>
 
             <div
