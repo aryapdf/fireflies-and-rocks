@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { Renderer, Camera, Geometry, Program, Mesh } from 'ogl';
 
 interface ParticlesProps {
@@ -16,15 +16,20 @@ interface ParticlesProps {
   className?: string;
 }
 
+export interface ParticlesRef {
+  setPosition: (x: number, y: number, z: number) => void;
+  getPosition: () => { x: number; y: number; z: number };
+}
+
 const defaultColors: string[] = ['#ffffff', '#ffffff', '#ffffff'];
 
 const hexToRgb = (hex: string): [number, number, number] => {
   hex = hex.replace(/^#/, '');
   if (hex.length === 3) {
     hex = hex
-      .split('')
-      .map(c => c + c)
-      .join('');
+        .split('')
+        .map(c => c + c)
+        .join('');
   }
   const int = parseInt(hex, 16);
   const r = ((int >> 16) & 255) / 255;
@@ -71,7 +76,6 @@ const vertex = /* glsl */ `
     }
     
     gl_Position = projectionMatrix * mvPos;
-    gl_Position = projectionMatrix * mvPos;
   }
 `;
 
@@ -99,22 +103,32 @@ const fragment = /* glsl */ `
   }
 `;
 
-const Particles: React.FC<ParticlesProps> = ({
-  particleCount = 200,
-  particleSpread = 10,
-  speed = 0.1,
-  particleColors,
-  moveParticlesOnHover = false,
-  particleHoverFactor = 1,
-  alphaParticles = false,
-  particleBaseSize = 100,
-  sizeRandomness = 1,
-  cameraDistance = 20,
-  disableRotation = false,
-  className
-}) => {
+const Particles = forwardRef<ParticlesRef, ParticlesProps>(({
+                                                              particleCount = 200,
+                                                              particleSpread = 10,
+                                                              speed = 0.1,
+                                                              particleColors,
+                                                              moveParticlesOnHover = false,
+                                                              particleHoverFactor = 1,
+                                                              alphaParticles = false,
+                                                              particleBaseSize = 100,
+                                                              sizeRandomness = 1,
+                                                              cameraDistance = 20,
+                                                              disableRotation = false,
+                                                              className
+                                                            }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const particlesRef = useRef<Mesh | null>(null);
+  const externalPositionRef = useRef({ x: 0, y: 0, z: 0 });
+
+  // Expose methods to parent
+  useImperativeHandle(ref, () => ({
+    setPosition: (x: number, y: number, z: number) => {
+      externalPositionRef.current = { x, y, z };
+    },
+    getPosition: () => externalPositionRef.current
+  }));
 
   useEffect(() => {
     const container = containerRef.current;
@@ -190,6 +204,7 @@ const Particles: React.FC<ParticlesProps> = ({
     });
 
     const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program });
+    particlesRef.current = particles;
 
     let animationFrameId: number;
     let lastTime = performance.now();
@@ -203,12 +218,15 @@ const Particles: React.FC<ParticlesProps> = ({
 
       program.uniforms.uTime.value = elapsed * 0.001;
 
+      // Apply external position (from GSAP) OR hover position
       if (moveParticlesOnHover) {
-        particles.position.x = -mouseRef.current.x * particleHoverFactor;
-        particles.position.y = -mouseRef.current.y * particleHoverFactor;
+        particles.position.x = externalPositionRef.current.x + (-mouseRef.current.x * particleHoverFactor);
+        particles.position.y = externalPositionRef.current.y + (-mouseRef.current.y * particleHoverFactor);
+        particles.position.z = externalPositionRef.current.z;
       } else {
-        particles.position.x = 0;
-        particles.position.y = 0;
+        particles.position.x = externalPositionRef.current.x;
+        particles.position.y = externalPositionRef.current.y;
+        particles.position.z = externalPositionRef.current.z;
       }
 
       if (!disableRotation) {
@@ -231,12 +249,13 @@ const Particles: React.FC<ParticlesProps> = ({
       if (container.contains(gl.canvas)) {
         container.removeChild(gl.canvas);
       }
+      particlesRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     particleCount,
     particleSpread,
     speed,
+    particleColors, // ← ADDED: Now listens to color changes
     moveParticlesOnHover,
     particleHoverFactor,
     alphaParticles,
@@ -246,7 +265,9 @@ const Particles: React.FC<ParticlesProps> = ({
     disableRotation
   ]);
 
-  return <div ref={containerRef} className={`relative w-full h-full ${className}`} />;
-};
+  return <div ref={containerRef} className={`relative w-full h-full ${className || ''}`} />;
+});
+
+Particles.displayName = 'Particles';
 
 export default Particles;
