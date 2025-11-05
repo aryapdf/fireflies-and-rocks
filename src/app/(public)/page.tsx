@@ -93,13 +93,15 @@ export default function Page() {
 
         // === TIMELINE ANAK #1 === (animasi teks)
         const textTL = gsap.timeline()
+            .addLabel('beginning-animation-section-one')
             .to('.main-text', {
                 opacity: 1,
-                duration: 5
+                duration: 5,
             })
             .to('.main-text', {
                 opacity: 0,
-                duration: 2
+                y: '50px',
+                duration: 2,
             });
 
         // === TIMELINE ANAK #2 === (animasi partikel)
@@ -122,7 +124,8 @@ export default function Page() {
                 y: 0,
                 duration: 1.2,
                 ease: 'power3.out'
-            });
+            })
+            .addLabel('end-animation-section-one')
 
         // === COMPOSE: Masukkan sub-timeline ke dalam master timeline ===
         mainTL
