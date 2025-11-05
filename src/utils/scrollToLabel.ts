@@ -1,12 +1,11 @@
 import { gsap } from 'gsap';
 
 /**
- * Scroll ke label tertentu di dalam timeline GSAP.
  *
- * @param {gsap.core.Timeline} timeline - timeline utama (biasanya dikembalikan dari useGSAP)
- * @param {string} label - nama label yang ingin dituju
- * @param {number} [duration=1] - durasi transisi (dalam detik)
- * @param {boolean} [smooth=true] - kalau true, scroll halus pakai tween; kalau false langsung loncat
+ * @param {gsap.core.Timeline} timeline
+ * @param {string} label
+ * @param {number} [duration=1]
+ * @param {boolean} [smooth=true]
  */
 export function scrollToLabel(
     timeline: gsap.core.Timeline,
