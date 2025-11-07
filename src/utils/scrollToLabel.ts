@@ -1,16 +1,9 @@
-import { gsap } from 'gsap';
+import {gsap} from "gsap";
 
-/**
- *
- * @param {gsap.core.Timeline} timeline
- * @param {string} label
- * @param {number} [duration=1]
- * @param {boolean} [smooth=true]
- */
 export function scrollToLabel(
     timeline: gsap.core.Timeline,
     label: string,
-    duration: number = 1,
+    duration: number = 1.5,
     smooth: boolean = true
 ) {
     if (!timeline || !label) {
@@ -18,23 +11,36 @@ export function scrollToLabel(
         return;
     }
 
-    // Ambil waktu label di timeline
     const labelTime = timeline.labels[label];
     if (labelTime === undefined) {
         console.warn(`scrollToLabel: label "${label}" tidak ditemukan di timeline.`);
         return;
     }
 
-    // Jika smooth = false, langsung loncat ke label tanpa animasi
-    if (!smooth) {
-        timeline.seek(labelTime, false);
-        return;
-    }
+    const st = timeline.scrollTrigger;
 
-    // Kalau smooth, tween posisi playhead ke waktu label
-    gsap.to(timeline, {
-        time: labelTime,
-        duration,
-        ease: 'power2.inOut',
-    });
+    if (st) {
+        const progress = labelTime / timeline.duration();
+        const scrollPosition = st.start + (progress * (st.end - st.start));
+
+        if (smooth) {
+            gsap.to(window, {
+                scrollTo: scrollPosition,
+                duration,
+                ease: 'power2.inOut',
+            });
+        } else {
+            window.scrollTo(0, scrollPosition);
+        }
+    } else {
+        if (smooth) {
+            gsap.to(timeline, {
+                time: labelTime,
+                duration,
+                ease: 'power3.inOut',
+            });
+        } else {
+            timeline.seek(labelTime, false);
+        }
+    }
 }
