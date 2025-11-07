@@ -107,7 +107,7 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
               gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
               gap: '32px',
               width: '100%',
-              padding: '0 20px',
+              paddingLeft: '90px',
             }}
         >
           {contributionsData.map((item, index) => (
@@ -225,30 +225,6 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
           ))}
         </div>
 
-        {/* Navigation Dots */}
-        <div style={{
-          display: 'flex',
-          gap: '12px',
-          marginTop: '48px',
-        }}>
-          {contributionsData.map((_, index) => (
-              <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  style={{
-                    width: currentIndex === index ? '32px' : '12px',
-                    height: '12px',
-                    borderRadius: '6px',
-                    border: 'none',
-                    backgroundColor: currentIndex === index
-                        ? (isDark ? '#ffffff' : '#000000')
-                        : (isDark ? '#444444' : '#cccccc'),
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                  }}
-              />
-          ))}
-        </div>
       </section>
   );
 };

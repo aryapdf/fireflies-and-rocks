@@ -110,12 +110,9 @@ export default function Page() {
                 opacity: 1,
                 duration: 2,
                 onComplete: () => {
-                    if (!hasTriggeredRef.current && mainTlRef.current) {
-                        hasTriggeredRef.current = true;
+                    if (mainTlRef.current) {
                         document.body.style.overflow = 'hidden';
-
                         scrollToLabel(mainTlRef.current, 'end-animation-section-one', 4, true);
-
                         setTimeout(() => {
                             document.body.style.overflow = '';
                         }, 4000);
@@ -176,6 +173,17 @@ export default function Page() {
                 duration: 1.5,
                 ease: 'power3.out'
             }, '>-0.8')
+            .to('#next-section', {
+                onReverseComplete: () => {
+                    if (mainTlRef.current) {
+                        document.body.style.overflow = 'hidden';
+                        scrollToLabel(mainTlRef.current, 'beginning-animation-section-one', 4, true);
+                        setTimeout(() => {
+                            document.body.style.overflow = '';
+                        }, 4000);
+                    }
+                }
+            })
             .addLabel('end-animation-section-one');
 
         mainTlRef.current = mainTL;
