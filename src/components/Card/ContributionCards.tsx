@@ -1,44 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { gsap } from 'gsap';
-
-export const contributionsData = [
-  {
-    id: 1,
-    title: "E-Commerce Platform",
-    category: "Full Stack Development",
-    image: "/api/placeholder/400/300",
-    description: "Complete brand overhaul with modern UI/UX",
-    tech: ["React", "Node.js", "AWS"],
-    color: "#3B82F6"
-  },
-  {
-    id: 2,
-    title: "Digital Marketing Suite",
-    category: "Marketing Analytics",
-    image: "/api/placeholder/400/300",
-    description: "Analytics dashboard for marketing campaigns",
-    tech: ["Vue.js", "Python", "Firebase"],
-    color: "#8B5CF6"
-  },
-  {
-    id: 3,
-    title: "Legal Tech Solution",
-    category: "Enterprise Software",
-    image: "/api/placeholder/400/300",
-    description: "Case management system for law firms",
-    tech: ["Angular", "Java", "PostgreSQL"],
-    color: "#EC4899"
-  },
-  {
-    id: 4,
-    title: "Startup MVP Builder",
-    category: "Product Development",
-    image: "/api/placeholder/400/300",
-    description: "Rapid prototyping platform for startups",
-    tech: ["Next.js", "GraphQL", "MongoDB"],
-    color: "#10B981"
-  }
-];
+import {toVw} from "@/utils/toVw";
 
 interface ContributionCardsProps {
   isDark?: boolean;
@@ -47,6 +9,8 @@ interface ContributionCardsProps {
 const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const contributionsData = require('@/lib/data/contribution.json')
+
 
   return (
       <section
@@ -54,11 +18,11 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
           id="contribution-section"
           style={{
             width: '100%',
+            height: '100%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '80px 20px',
             position: 'relative',
           }}
       >
@@ -72,16 +36,6 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
               opacity: 0,
             }}
         >
-          <div style={{
-            fontSize: '14px',
-            fontWeight: '600',
-            letterSpacing: '3px',
-            textTransform: 'uppercase',
-            color: isDark ? '#888888' : '#666666',
-            marginBottom: '16px',
-          }}>
-            Portfolio
-          </div>
           <h2 style={{
             fontSize: '48px',
             fontWeight: '700',
@@ -107,10 +61,10 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
               gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
               gap: '32px',
               width: '100%',
-              paddingLeft: '90px',
+              padding: `0 ${toVw(160)}`,
             }}
         >
-          {contributionsData.map((item, index) => (
+          {contributionsData.map((item:any, index:any) => (
               <div
                   key={item.id}
                   className="contribution-card"
@@ -204,7 +158,7 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
                     flexWrap: 'wrap',
                     gap: '8px',
                   }}>
-                    {item.tech.map((tech, i) => (
+                    {item.tech.map((tech:any, i:any) => (
                         <span
                             key={i}
                             style={{

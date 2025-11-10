@@ -94,36 +94,21 @@ export default function Page() {
 
     useGSAP(() => {
         const particlesObj = { x: 0, y: 0, z: 0 };
+        const cards = gsap.utils.toArray('.contribution-card');
 
         const mainTL = gsap.timeline({
             scrollTrigger: {
                 trigger: '#main-page',
                 start: 'top top',
                 end: '+=800%',
-                scrub: true,
+                scrub: 1.2,
                 pin: true,
             },
             defaults: { ease: 'power3.inOut' }
         })
             .addLabel('beginning-animation-section-one')
-            .to('.main-text', {
-                opacity: 1,
-                duration: 2,
-                onComplete: () => {
-                    if (mainTlRef.current) {
-                        document.body.style.overflow = 'hidden';
-                        scrollToLabel(mainTlRef.current, 'end-animation-section-one', 4, true);
-                        setTimeout(() => {
-                            document.body.style.overflow = '';
-                        }, 4000);
-                    }
-                }
-            })
-            .to('.main-text', {
-                opacity: 0,
-                y: '50px',
-                duration: 2,
-            })
+            .to('.main-text', { opacity: 1, duration: 2 })
+            .to('.main-text', { opacity: 0, y: '50px', duration: 2 })
             .to(particlesObj, {
                 x: 5,
                 duration: 5,
@@ -134,56 +119,41 @@ export default function Page() {
                     }
                 }
             })
-            .to('#next-section', {
-                opacity: 1,
-                y: 0,
-                duration: 1.2,
-                ease: 'power3.out'
-            })
-            // ANIMATE CONTRIBUTION TITLE
-            .to('.contribution-title', {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                duration: 2,
-                ease: 'power3.out'
-            }, '>')
-            // ANIMATE CARDS ONE BY ONE
-            .to('.contribution-card[data-index="0"]', {
-                opacity: 1,
-                y: 0,
-                duration: 1.5,
-                ease: 'power3.out'
-            }, '>')
-            .to('.contribution-card[data-index="1"]', {
-                opacity: 1,
-                y: 0,
-                duration: 1.5,
-                ease: 'power3.out'
-            }, '>-0.8')
-            .to('.contribution-card[data-index="2"]', {
-                opacity: 1,
-                y: 0,
-                duration: 1.5,
-                ease: 'power3.out'
-            }, '>-0.8')
-            .to('.contribution-card[data-index="3"]', {
-                opacity: 1,
-                y: 0,
-                duration: 1.5,
-                ease: 'power3.out'
-            }, '>-0.8')
-            .to('#next-section', {
-                onReverseComplete: () => {
+            .to('#next-section', { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' })
+            .addLabel('cards-start')
+            .to('.contribution-title', { opacity: 1, y: 0, scale: 1, duration: 2, ease: 'power3.out',
+                onComplete: () => {
                     if (mainTlRef.current) {
                         document.body.style.overflow = 'hidden';
-                        scrollToLabel(mainTlRef.current, 'beginning-animation-section-one', 4, true);
+                        scrollToLabel(mainTlRef.current, 'cards-end', .8, false);
                         setTimeout(() => {
                             document.body.style.overflow = '';
-                        }, 4000);
+                        }, 800);
                     }
-                }
-            })
+                } })
+            cards.forEach((card:any, i) => {
+                mainTL.to(
+                    card,
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1.5,
+                        ease: 'power3.out',
+                    },
+                    i === 0 ? '>' : '>-0.8'
+                );
+            });
+        mainTL
+            .to(cards, {duration: 1, onReverseComplete: () => {
+                    if (mainTlRef.current) {
+                        document.body.style.overflow = 'hidden';
+                        scrollToLabel(mainTlRef.current, 'cards-start', .8, false);
+                        setTimeout(() => {
+                            document.body.style.overflow = '';
+                        }, 800);
+                    }
+                }})
+            .addLabel('cards-end')
             .addLabel('end-animation-section-one');
 
         mainTlRef.current = mainTL;

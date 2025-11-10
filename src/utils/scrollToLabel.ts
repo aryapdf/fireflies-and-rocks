@@ -30,7 +30,11 @@ export function scrollToLabel(
                 ease: 'power2.inOut',
             });
         } else {
-            window.scrollTo(0, scrollPosition);
+            gsap.to(window, {
+                scrollTo: scrollPosition,
+                duration,
+                ease: 'none',
+            });
         }
     } else {
         if (smooth) {

@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "E-Commerce Platform",
+    "category": "Full Stack Development",
+    "image": "/api/placeholder/400/300",
+    "description": "Complete brand overhaul with modern UI/UX",
+    "tech": ["React", "Node.js", "AWS"],
+    "color": "#3B82F6"
+  },
+  {
+    "id": 2,
+    "title": "Digital Marketing Suite",
+    "category": "Marketing Analytics",
+    "image": "/api/placeholder/400/300",
+    "description": "Analytics dashboard for marketing campaigns",
+    "tech": ["Vue.js", "Python", "Firebase"],
+    "color": "#8B5CF6"
+  },
+  {
+    "id": 3,
+    "title": "Legal Tech Solution",
+    "category": "Enterprise Software",
+    "image": "/api/placeholder/400/300",
+    "description": "Case management system for law firms",
+    "tech": ["Angular", "Java", "PostgreSQL"],
+    "color": "#EC4899"
+  },
+  {
+    "id": 4,
+    "title": "Startup MVP Builder",
+    "category": "Product Development",
+    "image": "/api/placeholder/400/300",
+    "description": "Rapid prototyping platform for startups",
+    "tech": ["Next.js", "GraphQL", "MongoDB"],
+    "color": "#10B981"
+  }
+]
