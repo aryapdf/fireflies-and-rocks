@@ -101,6 +101,7 @@ export default function Page() {
             },
             defaults: { ease: 'power3.inOut' }
         })
+
         // Animation Jumbotron to Section One
         mainTL
             .addLabel('beginning-animation-section-one')
@@ -108,6 +109,7 @@ export default function Page() {
             .to('.main-text', { opacity: 0, y: '50px', duration: 2 })
             .to(particlesObj, {
                 x: 5,
+                y: -3,
                 duration: 5,
                 ease: 'power2.inOut',
                 onUpdate: () => {
@@ -116,11 +118,11 @@ export default function Page() {
                     }
                 }
             })
-            .to('#next-section', { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' })
+
         // Animation Section One
         mainTL
             .addLabel('cards-start')
-            .to('#next-section', {duration: 1, onComplete: () => {
+            .to('#next-section', {duration: 0, opacity: 1, y: 0, onComplete: () => {
                     if (mainTlRef.current) {
                         document.body.style.overflow = 'hidden';
                         scrollToLabel(mainTlRef.current, 'cards-end', 1.5, false);
@@ -153,6 +155,33 @@ export default function Page() {
                 }})
             .addLabel('cards-end')
             .addLabel('end-animation-section-one');
+
+        //Animation Section One to Two
+        mainTL.to('#next-section', { duration: 1 })
+            cards.forEach((card:any, i) => {
+                mainTL.to(
+                    card,
+                    {
+                        opacity: 0,
+                        y: 50,
+                        duration: 1.5,
+                        ease: 'power3.out',
+                    },
+                    i === 0 ? '>' : '>-0.8'
+                );
+            });
+        mainTL
+            .to('#next-section', { duration: 1, opacity: 0, y: 50 })
+            .to(particlesObj, {
+                y: 3,
+                duration: 5,
+                ease: 'power2.inOut',
+                onUpdate: () => {
+                    if (particlesRef.current) {
+                        particlesRef.current.setPosition(particlesObj.x, particlesObj.y, particlesObj.z);
+                    }
+                }
+            })
 
         mainTlRef.current = mainTL;
 
