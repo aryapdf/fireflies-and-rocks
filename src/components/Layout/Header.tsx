@@ -2,6 +2,7 @@
 'use client';
 
 import { toVw } from '@/utils/toVw';
+import TextUnderline from "@/components/Text/TextUnderline";
 
 interface HeaderProps {
     isDark?: boolean;
@@ -47,7 +48,7 @@ export default function Header({ isDark }: HeaderProps) {
         <header style={styles.header}>
             <div style={styles.logo}>badcable.</div>
             <div style={styles.headerRight}>
-                <div><span style={styles.service}>se</span>lf service</div>
+                <div><TextUnderline text={'se'} />lf service</div>
                 {/*<span style={styles.discount}>20% OFF</span>*/}
             </div>
         </header>

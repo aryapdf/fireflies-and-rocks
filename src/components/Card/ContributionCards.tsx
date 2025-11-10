@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import {toVw} from "@/utils/toVw";
+import TextUnderline from "@/components/Text/TextUnderline";
 
 interface ContributionCardsProps {
   isDark?: boolean;
@@ -31,7 +32,7 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
             className="contribution-title"
             style={{
               textAlign: 'left',
-              marginBottom: '60px',
+              marginBottom: toVw(40),
               width: "100%",
               opacity: 0,
             }}
@@ -39,18 +40,11 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
           <h2 style={{
             fontSize: '48px',
             fontWeight: '700',
-            margin: '0 0 16px 0',
+            marginBottom: toVw(24),
             color: isDark ? '#ffffff' : '#000000',
           }}>
-            Notable Contributions
+            Notable <TextUnderline text="Contributions" size={20} />
           </h2>
-          <p style={{
-            fontSize: '18px',
-            color: isDark ? '#aaaaaa' : '#666666',
-            margin: 0,
-          }}>
-            Crafting digital experiences that drive results
-          </p>
         </div>
 
         {/* Cards Container */}
