@@ -13,7 +13,7 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
 
 
   return (
-      <section
+      <div
           ref={sectionRef}
           id="contribution-section"
           style={{
@@ -30,9 +30,9 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
         <div
             className="contribution-title"
             style={{
-              textAlign: 'center',
+              textAlign: 'left',
               marginBottom: '60px',
-              maxWidth: '800px',
+              width: "100%",
               opacity: 0,
             }}
         >
@@ -61,7 +61,6 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
               gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
               gap: '32px',
               width: '100%',
-              padding: `0 ${toVw(160)}`,
             }}
         >
           {contributionsData.map((item:any, index:any) => (
@@ -179,7 +178,7 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
           ))}
         </div>
 
-      </section>
+      </div>
   );
 };
 

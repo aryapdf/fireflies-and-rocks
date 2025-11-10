@@ -49,14 +49,6 @@ export default function Page() {
             alignItems: 'center',
             justifyContent: 'center',
             minHeight: '100vh',
-            padding: `0 ${toVw(120)}`,
-        },
-        section: {
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
         },
         backgroundContainer: {
             position: 'fixed' as const,
@@ -75,16 +67,19 @@ export default function Page() {
             width: '200vw',
             height: '200vh',
         },
+        section: {
+            padding: `0 ${toVw(150)}`,
+            width: '100%',
+            minHeight: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
         nextSection: {
             position: 'absolute' as const,
             top: 0,
             opacity: 0,
             transform: 'translateY(50px)',
-            width: '100%',
-            minHeight: '100vh',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
         },
     };
 
@@ -106,6 +101,8 @@ export default function Page() {
             },
             defaults: { ease: 'power3.inOut' }
         })
+        // Animation Jumbotron to Section One
+        mainTL
             .addLabel('beginning-animation-section-one')
             .to('.main-text', { opacity: 1, duration: 2 })
             .to('.main-text', { opacity: 0, y: '50px', duration: 2 })
@@ -120,17 +117,19 @@ export default function Page() {
                 }
             })
             .to('#next-section', { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' })
+        // Animation Section One
+        mainTL
             .addLabel('cards-start')
-            .to('.contribution-title', { opacity: 1, y: 0, scale: 1, duration: 2, ease: 'power3.out',
-                onComplete: () => {
+            .to('#next-section', {duration: 1, onComplete: () => {
                     if (mainTlRef.current) {
                         document.body.style.overflow = 'hidden';
-                        scrollToLabel(mainTlRef.current, 'cards-end', .8, false);
+                        scrollToLabel(mainTlRef.current, 'cards-end', 1.5, false);
                         setTimeout(() => {
                             document.body.style.overflow = '';
-                        }, 800);
+                        }, 1500);
                     }
-                } })
+                }})
+            .to('.contribution-title', { opacity: 1, y: 0, scale: 1, duration: 2, ease: 'power3.out'})
             cards.forEach((card:any, i) => {
                 mainTL.to(
                     card,
@@ -143,14 +142,13 @@ export default function Page() {
                     i === 0 ? '>' : '>-0.8'
                 );
             });
-        mainTL
-            .to(cards, {duration: 1, onReverseComplete: () => {
+            mainTL.to(cards, {duration: 1, onReverseComplete: () => {
                     if (mainTlRef.current) {
                         document.body.style.overflow = 'hidden';
-                        scrollToLabel(mainTlRef.current, 'cards-start', .8, false);
+                        scrollToLabel(mainTlRef.current, 'cards-start', 1.5, false);
                         setTimeout(() => {
                             document.body.style.overflow = '';
-                        }, 800);
+                        }, 1500);
                     }
                 }})
             .addLabel('cards-end')
@@ -205,7 +203,7 @@ export default function Page() {
                         />
                     </section>
 
-                    <section id="next-section" style={styles.nextSection}>
+                    <section id="next-section" style={{...styles.section, ...styles.nextSection}}>
                         <ContributionCards isDark={isDark} />
                     </section>
                 </main>
