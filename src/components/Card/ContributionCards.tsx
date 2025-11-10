@@ -38,7 +38,7 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
             }}
         >
           <h2 style={{
-            fontSize: '48px',
+            fontSize: toVw(48),
             fontWeight: '700',
             marginBottom: toVw(24),
             color: isDark ? '#ffffff' : '#000000',
@@ -52,8 +52,8 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
             className="contribution-cards-container"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '32px',
+              gridTemplateColumns: `repeat(auto-fit, minmax(${toVw(280)}, 1fr))`,
+              gap: toVw(32),
               width: '100%',
             }}
         >
@@ -64,7 +64,7 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
                   data-index={index}
                   style={{
                     backgroundColor: isDark ? '#1a1a1a' : '#f8f8f8',
-                    borderRadius: '20px',
+                    borderRadius: toVw(20),
                     overflow: 'hidden',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
@@ -93,7 +93,7 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
                 {/* Image */}
                 <div style={{
                   width: '100%',
-                  height: '220px',
+                  height: toVw(220),
                   backgroundColor: item.color,
                   display: 'flex',
                   alignItems: 'center',
@@ -102,7 +102,7 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
                   overflow: 'hidden',
                 }}>
                   <div style={{
-                    fontSize: '64px',
+                    fontSize: toVw(64),
                     opacity: 0.2,
                     fontWeight: 'bold',
                     color: '#ffffff',
@@ -111,12 +111,12 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
                   </div>
                   <div style={{
                     position: 'absolute',
-                    top: '16px',
-                    right: '16px',
+                    top: toVw(16),
+                    right: toVw(16),
                     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    padding: '6px 12px',
-                    borderRadius: '20px',
-                    fontSize: '12px',
+                    padding: `${toVw(6)} ${toVw(12)}`,
+                    borderRadius: toVw(20),
+                    fontSize: toVw(12),
                     fontWeight: '600',
                     color: item.color,
                   }}>
@@ -126,19 +126,19 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
 
                 {/* Content */}
                 <div style={{
-                  padding: '24px',
+                  padding: toVw(24),
                 }}>
                   <h3 style={{
-                    margin: '0 0 12px 0',
-                    fontSize: '22px',
+                    margin: `0 0 ${toVw(12)} 0`,
+                    fontSize: toVw(22),
                     fontWeight: '700',
                     color: isDark ? '#ffffff' : '#000000',
                   }}>
                     {item.title}
                   </h3>
                   <p style={{
-                    margin: '0 0 16px 0',
-                    fontSize: '14px',
+                    margin: `0 0 ${toVw(16)} 0`,
+                    fontSize: toVw(14),
                     lineHeight: '1.6',
                     color: isDark ? '#aaaaaa' : '#666666',
                   }}>
@@ -149,16 +149,16 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
                   <div style={{
                     display: 'flex',
                     flexWrap: 'wrap',
-                    gap: '8px',
+                    gap: toVw(8),
                   }}>
                     {item.tech.map((tech:any, i:any) => (
                         <span
                             key={i}
                             style={{
-                              padding: '4px 12px',
+                              padding: `${toVw(4)} ${toVw(12)}`,
                               backgroundColor: isDark ? '#2a2a2a' : '#e8e8e8',
-                              borderRadius: '12px',
-                              fontSize: '12px',
+                              borderRadius: toVw(12),
+                              fontSize: toVw(12),
                               color: isDark ? '#cccccc' : '#555555',
                               fontWeight: '500',
                             }}

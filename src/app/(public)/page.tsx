@@ -8,8 +8,6 @@ import Sidebar from '@/components/Layout/Sidebar';
 import DarkModeToggle from '@/components/Layout/DarkModeToggle';
 import ParticlesBackground from '@/components/Layout/ParticlesBackground';
 import HeroSection from '@/components/Sections/HeroSection';
-import ContributionCards from '@/components/Card/ContributionCards';
-import { toVw } from '@/utils/toVw';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { gsap } from 'gsap';
 import Contributions from "@/components/Sections/Contributions";
