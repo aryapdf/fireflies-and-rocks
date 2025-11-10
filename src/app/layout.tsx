@@ -1,3 +1,5 @@
+'use client'
+
 import "./globals.css";
 import StoreProvider from "@/providers/StoreProvider";
 import ThemeSync from "@/components/Theme/ThemeSync";

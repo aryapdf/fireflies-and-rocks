@@ -14,6 +14,7 @@ export const useHomeAnimations = () => {
     useGSAP(() => {
         const particlesObj = { x: 0, y: 0, z: 0 };
         const cards = gsap.utils.toArray('.contribution-card');
+        const projects = gsap.utils.toArray('.project-card')
 
         const updateParticles = () => {
             particlesRef.current?.setPosition(particlesObj.x, particlesObj.y, particlesObj.z);
@@ -47,7 +48,7 @@ export const useHomeAnimations = () => {
         // Section 1: Show cards
         mainTL
             .addLabel('cards-start')
-            .to('#next-section', {
+            .to('#contribution-section', {
                 duration: 0,
                 opacity: 1,
                 y: 0,
@@ -74,7 +75,7 @@ export const useHomeAnimations = () => {
             .addLabel('end-animation-section-one');
 
         // Section 1 to 2 transition: Hide cards
-        mainTL.to('#next-section', { duration: 1 });
+        mainTL.to('#contribution-section', { duration: 1 });
 
         cards.forEach((card: any, i: number) => {
             mainTL.to(card, {
@@ -86,8 +87,18 @@ export const useHomeAnimations = () => {
         });
 
         mainTL
-            .to('#next-section', { duration: 1, opacity: 0, y: 50 })
-            .to(particlesObj, { y: 3, duration: 5, ease: 'power2.inOut', onUpdate: updateParticles });
+            .to('#contribution-section', { duration: 1, opacity: 0, y: 50 })
+            .to(particlesObj, { y: 3, duration: 5, ease: 'power2.inOut', onUpdate: updateParticles })
+            .to('#project-section, .project-title', {duration: 1, opacity: 1, y: 0})
+        projects.forEach((card: any, i: number) => {
+            mainTL.to(card, {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                ease: 'power3.out',
+            }, i === 0 ? '>' : '>-0.8');
+        })
+            mainTL.to('see-project-btn', {duration: 0, opacity: 1, y: 0})
 
         mainTlRef.current = mainTL;
 

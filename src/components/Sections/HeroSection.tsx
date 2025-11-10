@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { toVw } from '@/utils/toVw';
 import { fonts } from '@/utils/font';
 import TextType from '@/components/Reactbits/TextType';
@@ -6,10 +6,11 @@ import TextType from '@/components/Reactbits/TextType';
 interface HeroSectionProps {
     jumboText: string[];
     isFrozen: boolean;
-    setTextIndex: (index: number) => void;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ jumboText, isFrozen, setTextIndex }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ jumboText, isFrozen }) => {
+    const [textIndex, setTextIndex] = useState<number>(0);
+
     return (
         <section
             className="main-text"

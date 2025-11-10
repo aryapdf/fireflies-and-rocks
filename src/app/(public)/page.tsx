@@ -11,6 +11,7 @@ import HeroSection from '@/components/Sections/HeroSection';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { gsap } from 'gsap';
 import Contributions from "@/components/Sections/Contributions";
+import ProjectSection from "@/components/Sections/ProjectSection";
 
 gsap.registerPlugin(ScrollToPlugin);
 
@@ -23,7 +24,6 @@ export default function Page() {
         'Back end. (developer)',
         '.Musician'
     ]);
-    const [textIndex, setTextIndex] = useState<number>(0);
     const [isFrozen] = useState<boolean>(false);
 
     return (
@@ -57,10 +57,11 @@ export default function Page() {
                     <HeroSection
                         jumboText={jumboText}
                         isFrozen={isFrozen}
-                        setTextIndex={setTextIndex}
                     />
 
                     <Contributions />
+
+                    <ProjectSection />
                 </main>
             </div>
         </div>

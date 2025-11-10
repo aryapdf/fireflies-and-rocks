@@ -7,7 +7,7 @@ export default function Contributions() {
 
     return (
         <section
-            id="next-section"
+            id="contribution-section"
             style={{
                 padding: `0 ${toVw(150)}`,
                 width: '100%',

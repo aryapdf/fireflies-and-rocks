@@ -43,7 +43,7 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
             marginBottom: toVw(24),
             color: isDark ? '#ffffff' : '#000000',
           }}>
-            Notable <TextUnderline text="Contributions" size={20} />
+            notable <TextUnderline text="contributions" size={20} />
           </h2>
         </div>
 
