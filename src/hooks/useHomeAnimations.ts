@@ -32,7 +32,7 @@ export const useHomeAnimations = () => {
                 trigger: '#main-page',
                 start: 'top top',
                 end: '+=800%',
-                scrub: 1.2,
+                scrub: 1,
                 pin: true,
             },
             defaults: { ease: 'power3.inOut' }
@@ -41,47 +41,46 @@ export const useHomeAnimations = () => {
         // Intro: Text fade in/out + particles move
         mainTL
             .addLabel('beginning-animation-section-one')
-            .to('.main-text', { opacity: 1, duration: 2 })
-            .to('.main-text', { opacity: 0, y: 50, duration: 2 })
+            .to('.main-text', { opacity: 1, duration: 1 })
+            .to('.main-text', { opacity: 0, y: 50, duration: 1 })
             .to(particlesObj, { x: 5, y: -3, duration: 5, ease: 'power2.inOut', onUpdate: updateParticles });
 
         // Section 1: Show cards
         mainTL
-            .addLabel('cards-start')
             .to('#contribution-section', {
-                duration: 0,
+                duration: 1,
                 opacity: 1,
                 y: 0,
-                onComplete: () => autoScroll('cards-end', 1.5)
             })
-            .to('.contribution-title', { opacity: 1, y: 0, scale: 1, duration: 2, ease: 'power3.out' });
+            .to('.contribution-title', { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power3.out' })
+            .addLabel('contribution-cards-start')
+            .to('#contribution-section', { opacity: 1, duration: 1, onComplete: () => autoScroll('contribution-cards-end', 1) })
 
         // Animate cards with stagger
         cards.forEach((card: any, i: number) => {
             mainTL.to(card, {
                 opacity: 1,
                 y: 0,
-                duration: 1.5,
+                duration: 1,
                 ease: 'power3.out',
             }, i === 0 ? '>' : '>-0.8');
         });
 
         mainTL
-            .to(cards, {
-                duration: 1,
-                onReverseComplete: () => autoScroll('cards-start', 1.5)
-            })
-            .addLabel('cards-end')
+            .to(cards, { duration: 1, onReverseComplete: () => autoScroll('contribution-cards-start', 1)})
+            .addLabel('contribution-cards-end')
             .addLabel('end-animation-section-one');
 
         // Section 1 to 2 transition: Hide cards
-        mainTL.to('#contribution-section', { duration: 1 });
+        mainTL
+            .addLabel('section-two-start')
+            // .to('#contribution-section', { duration: 1, onComplete: () => autoScroll('section-two-end', 2) })
 
         cards.forEach((card: any, i: number) => {
             mainTL.to(card, {
                 opacity: 0,
                 y: 50,
-                duration: 1.5,
+                duration: 1,
                 ease: 'power3.out',
             }, i === 0 ? '>' : '>-0.8');
         });
@@ -94,11 +93,14 @@ export const useHomeAnimations = () => {
             mainTL.to(card, {
                 opacity: 1,
                 y: 0,
-                duration: 1.5,
+                duration: 0,
                 ease: 'power3.out',
             }, i === 0 ? '>' : '>-0.8');
         })
-            mainTL.to('see-project-btn', {duration: 0, opacity: 1, y: 0})
+            mainTL
+                .to('see-project-btn', {duration: 0, opacity: 1, y: 0})
+                // .to('#contribution-section', { duration: 1, onReverseComplete: () => autoScroll('section-two-start', 2) })
+                .addLabel('section-two-end')
 
         mainTlRef.current = mainTL;
 

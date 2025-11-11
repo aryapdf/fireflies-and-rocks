@@ -33,6 +33,15 @@ a {
   text-decoration: none;
 }
 
+/* Global Custom Class */
+.visible {
+  opacity: 1 !important;
+}
+
+.animate {
+  transition: all .3s ease;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

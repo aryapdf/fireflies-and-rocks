@@ -35,6 +35,7 @@ const ContributionCards: React.FC<ContributionCardsProps> = ({ isDark = false })
               marginBottom: toVw(40),
               width: "100%",
               opacity: 0,
+              transform: "translateY(50px)"
             }}
         >
           <h2 style={{
