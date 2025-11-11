@@ -3,7 +3,6 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ParticlesRef } from '@/components/Reactbits/Particles';
-import { scrollToLabel } from '@/utils/scrollToLabel';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,95 +11,248 @@ export const useHomeAnimations = () => {
     const mainTlRef = useRef<gsap.core.Timeline | null>(null);
 
     useGSAP(() => {
-        const particlesObj = { x: 0, y: 0, z: 0 };
+        const particlesObj = { x: 0, y: 0, z: 0, rotation: 0 };
         const cards = gsap.utils.toArray('.contribution-card');
-        const projects = gsap.utils.toArray('.project-card')
+        const projects = gsap.utils.toArray('.project-card');
 
         const updateParticles = () => {
             particlesRef.current?.setPosition(particlesObj.x, particlesObj.y, particlesObj.z);
-        };
-
-        const autoScroll = (label: string, duration: number) => {
-            if (!mainTlRef.current) return;
-            document.body.style.overflow = 'hidden';
-            scrollToLabel(mainTlRef.current, label, duration, false);
-            setTimeout(() => { document.body.style.overflow = ''; }, duration * 1000);
         };
 
         const mainTL = gsap.timeline({
             scrollTrigger: {
                 trigger: '#main-page',
                 start: 'top top',
-                end: '+=800%',
-                scrub: 1,
+                end: '+=1000%',
+                scrub: 1.8,
                 pin: true,
             },
-            defaults: { ease: 'power3.inOut' }
+            defaults: { ease: 'power2.inOut' }
         });
 
-        // Intro: Text fade in/out + particles move
+        // ========================================
+        // 🌌 INTRO: Warp Speed Effect
+        // ========================================
         mainTL
-            .addLabel('beginning-animation-section-one')
-            .to('.main-text', { opacity: 1, duration: 1 })
-            .to('.main-text', { opacity: 0, y: 50, duration: 1 })
-            .to(particlesObj, { x: 5, y: -3, duration: 5, ease: 'power2.inOut', onUpdate: updateParticles });
-
-        // Section 1: Show cards
-        mainTL
-            .to('#contribution-section', {
-                duration: 1,
-                opacity: 1,
-                y: 0,
+            .addLabel('intro-start')
+            .to('.main-text', {
+                opacity: 0,
+                scale: 0.8,
+                rotateX: -15,
+                y: -100,
+                duration: 3,
+                ease: 'power3.in',
             })
-            .to('.contribution-title', { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power3.out' })
-            .addLabel('contribution-cards-start')
-            .to('#contribution-section', { opacity: 1, duration: 1, onComplete: () => autoScroll('contribution-cards-end', 1) })
+            .to(particlesObj, {
+                z: 8,
+                duration: 4,
+                ease: 'power4.inOut',
+                onUpdate: updateParticles
+            }, '<')
+            .addLabel('intro-end');
 
-        // Animate cards with stagger
-        cards.forEach((card: any, i: number) => {
-            mainTL.to(card, {
+        // ========================================
+        // 🎴 SECTION 1: Hologram Card Reveal
+        // ========================================
+        mainTL
+            .addLabel('cards-start')
+            .to('#contribution-section', {
                 opacity: 1,
-                y: 0,
-                duration: 1,
-                ease: 'power3.out',
-            }, i === 0 ? '>' : '>-0.8');
+                scale: 1,
+                duration: 0,
+            })
+            // Particles drift sideways
+            .to(particlesObj, {
+                x: 5,
+                y: -2,
+                rotation: 360,
+                duration: 6,
+                ease: 'sine.inOut',
+                onUpdate: updateParticles
+            }, '<')
+            // Title appears with glitch effect
+            .fromTo('.contribution-title',
+                    {
+                        opacity: 0,
+                        y: 100,
+                        scale: 0.5,
+                        rotateX: 90,
+                        filter: 'blur(20px)'
+                    },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        rotateX: 0,
+                        filter: 'blur(0px)',
+                        duration: 3,
+                        ease: 'back.out(1.7)',
+                    }
+                )
+
+        // Cards appear with stagger + 3D rotation
+        cards.forEach((card: any, i: number) => {
+            mainTL.fromTo(card,
+                {
+                    opacity: 0,
+                    y: 150,
+                    rotateY: -45,
+                    rotateX: 25,
+                    scale: 0.7,
+                    filter: 'blur(15px) brightness(0.5)'
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    rotateY: 0,
+                    rotateX: 0,
+                    scale: 1,
+                    filter: 'blur(0px) brightness(1)',
+                    duration: 2.5,
+                    ease: 'expo.out',
+                },
+                i === 0 ? '>-0.3' : '>-1.8'
+            );
         });
 
-        mainTL
-            .to(cards, { duration: 1, onReverseComplete: () => autoScroll('contribution-cards-start', 1)})
-            .addLabel('contribution-cards-end')
-            .addLabel('end-animation-section-one');
+        // Hold cards on screen
+        mainTL.to('#contribution-section', { duration: 4 });
 
-        // Section 1 to 2 transition: Hide cards
+        // ========================================
+        // 🌠 TRANSITION: Particle Explosion
+        // ========================================
         mainTL
-            .addLabel('section-two-start')
-            // .to('#contribution-section', { duration: 1, onComplete: () => autoScroll('section-two-end', 2) })
+            .addLabel('cards-exit')
+            // Particles explode outward
+            .to(particlesObj, {
+                x: 0,
+                y: 0,
+                z: 0,
+                duration: 3,
+                ease: 'power4.in',
+                onUpdate: updateParticles
+            })
+            // Cards fly away with rotation
+            .to('.contribution-title', {
+                opacity: 0,
+                y: -80,
+                scale: 0.6,
+                rotateX: -45,
+                filter: 'blur(20px)',
+                duration: 2.5,
+                ease: 'power3.in'
+            }, '<');
 
         cards.forEach((card: any, i: number) => {
+            const randomX = gsap.utils.random(-300, 300);
+            const randomY = gsap.utils.random(-200, -100);
+            const randomRotate = gsap.utils.random(-180, 180);
+
             mainTL.to(card, {
                 opacity: 0,
-                y: 50,
-                duration: 1,
-                ease: 'power3.out',
-            }, i === 0 ? '>' : '>-0.8');
+                x: randomX,
+                y: randomY,
+                rotateZ: randomRotate,
+                rotateY: 90,
+                scale: 0.3,
+                filter: 'blur(25px)',
+                duration: 2,
+                ease: 'power4.in',
+            }, i === 0 ? '<' : '<+0.15');
         });
 
+        mainTL.to('#contribution-section', {
+            opacity: 0,
+            duration: 0
+        });
+
+        // ========================================
+        // 🚀 SECTION 2: Project Launch
+        // ========================================
         mainTL
-            .to('#contribution-section', { duration: 1, opacity: 0, y: 50 })
-            .to(particlesObj, { y: 3, duration: 5, ease: 'power2.inOut', onUpdate: updateParticles })
-            .to('#project-section, .project-title', {duration: 1, opacity: 1, y: 0})
-        projects.forEach((card: any, i: number) => {
-            mainTL.to(card, {
+            .addLabel('projects-start')
+            // Particles reset and drift
+            .to(particlesObj, {
+                x: -5,
+                y: 2,
+                z: 3,
+                duration: 3,
+                ease: 'power2.out',
+                onUpdate: updateParticles
+            })
+            // Project section materializes
+            .fromTo('#project-section',
+                {
+                    opacity: 0,
+                    scale: 0.8,
+                    filter: 'blur(30px)'
+                },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    filter: 'blur(0px)',
+                    duration: 3,
+                    ease: 'power3.out'
+                }
+            )
+            // Title appears with scan effect
+            .fromTo('.project-title',
+                {
+                    opacity: 0,
+                    y: 80,
+                    scaleX: 0.5,
+                    filter: 'blur(15px)'
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scaleX: 1,
+                    filter: 'blur(0px)',
+                    duration: 2.5,
+                    ease: 'back.out(1.4)'
+                },
+                '<+0.5'
+            );
+
+        // Projects appear like holograms
+        projects.forEach((project: any, i: number) => {
+            mainTL.fromTo(project,
+                {
+                    opacity: 0,
+                    y: 100,
+                    rotateX: 45,
+                    scale: 0.85,
+                    filter: 'blur(10px) brightness(0.3)'
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    rotateX: 0,
+                    scale: 1,
+                    filter: 'blur(0px) brightness(1)',
+                    duration: 2.5,
+                    ease: 'expo.out',
+                },
+                i === 0 ? '>-0.5' : '>-1.5'
+            );
+        });
+
+        // Final particle drift
+        mainTL
+            .to(particlesObj, {
+                x: 0,
+                y: 0,
+                z: 2,
+                duration: 6,
+                ease: 'sine.inOut',
+                onUpdate: updateParticles
+            })
+            .to('.see-project-btn', {
                 opacity: 1,
                 y: 0,
-                duration: 0,
-                ease: 'power3.out',
-            }, i === 0 ? '>' : '>-0.8');
-        })
-            mainTL
-                .to('see-project-btn', {duration: 0, opacity: 1, y: 0})
-                // .to('#contribution-section', { duration: 1, onReverseComplete: () => autoScroll('section-two-start', 2) })
-                .addLabel('section-two-end')
+                duration: 0
+            })
+            .addLabel('projects-end');
 
         mainTlRef.current = mainTL;
 
