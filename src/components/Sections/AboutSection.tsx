@@ -81,7 +81,7 @@ export default function AboutSection() {
     };
 
     return (
-        <div
+        <section
             ref={sectionRef}
             id="about-section"
             style={{
@@ -91,8 +91,9 @@ export default function AboutSection() {
                 flexDirection: 'column',
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
-                position: 'relative',
-                padding: `${toVw(80)} 0`,
+                padding: `${toVw(150)}`,
+                position: 'absolute',
+                top: 0,
                 opacity: 0,
                 transform: 'translateY(50px)',
             }}
@@ -204,131 +205,145 @@ export default function AboutSection() {
                 </div>
             </div>
 
-            {/* Skills Grid */}
             <div
-                className="about-skills"
                 style={{
-                    display: 'grid',
-                    gridTemplateColumns: `repeat(4, 1fr)`,
-                    gap: toVw(32),
+                    display: 'flex',
+                    flex: 1,
+                    flexDirection: "column",
+                    position: 'relative',
                     width: '100%',
-                    marginBottom: toVw(80),
                 }}
             >
-                {profileData.skills.map((skill, index) => (
-                    <div
-                        key={index}
-                        className="skill-card"
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: toVw(12),
-                            padding: toVw(24),
-                            backgroundColor: isDark ? '#1a1a1a' : '#f8f8f8',
-                            borderRadius: toVw(16),
-                            border: `1px solid ${isDark ? '#333333' : '#e0e0e0'}`,
-                            cursor: 'pointer',
-                            transition: 'all 0.3s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                            gsap.to(e.currentTarget, {
-                                y: -8,
-                                scale: 1.02,
-                                duration: 0.3,
-                                ease: 'power2.out',
-                            });
-                        }}
-                        onMouseLeave={(e) => {
-                            gsap.to(e.currentTarget, {
-                                y: 0,
-                                scale: 1,
-                                duration: 0.3,
-                                ease: 'power2.out',
-                            });
-                        }}
-                    >
-                        <div style={{
-                            fontSize: toVw(40),
-                            marginBottom: toVw(8),
-                        }}>
-                            {skill.icon}
+                {/* Skills Grid */}
+                <div
+                    className="about-skills"
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: `repeat(4, 1fr)`,
+                        gap: toVw(32),
+                        width: '100%',
+                        marginBottom: toVw(80),
+                        position: 'absolute',
+                        top: 0,
+                    }}
+                >
+                    {profileData.skills.map((skill, index) => (
+                        <div
+                            key={index}
+                            className="skill-card"
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: toVw(12),
+                                padding: toVw(24),
+                                backgroundColor: isDark ? '#1a1a1a' : '#f8f8f8',
+                                borderRadius: toVw(16),
+                                border: `1px solid ${isDark ? '#333333' : '#e0e0e0'}`,
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease',
+                            }}
+                            onMouseEnter={(e) => {
+                                gsap.to(e.currentTarget, {
+                                    y: -8,
+                                    scale: 1.02,
+                                    duration: 0.3,
+                                    ease: 'power2.out',
+                                });
+                            }}
+                            onMouseLeave={(e) => {
+                                gsap.to(e.currentTarget, {
+                                    y: 0,
+                                    scale: 1,
+                                    duration: 0.3,
+                                    ease: 'power2.out',
+                                });
+                            }}
+                        >
+                            <div style={{
+                                fontSize: toVw(40),
+                                marginBottom: toVw(8),
+                            }}>
+                                {skill.icon}
+                            </div>
+                            <h4 style={{
+                                fontSize: toVw(18),
+                                fontWeight: '700',
+                                margin: 0,
+                                color: isDark ? '#ffffff' : '#000000',
+                            }}>
+                                {skill.title}
+                            </h4>
+                            <p style={{
+                                fontSize: toVw(13),
+                                lineHeight: 1.6,
+                                margin: 0,
+                                color: isDark ? '#888888' : '#666666',
+                            }}>
+                                {skill.description}
+                            </p>
                         </div>
-                        <h4 style={{
-                            fontSize: toVw(18),
-                            fontWeight: '700',
-                            margin: 0,
-                            color: isDark ? '#ffffff' : '#000000',
-                        }}>
-                            {skill.title}
-                        </h4>
-                        <p style={{
-                            fontSize: toVw(13),
-                            lineHeight: 1.6,
-                            margin: 0,
-                            color: isDark ? '#888888' : '#666666',
-                        }}>
-                            {skill.description}
-                        </p>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
 
-            {/* Experience Sections */}
-            <div
-                className="about-experience"
-                style={{
-                    display: 'grid',
-                    gridTemplateColumns: `repeat(3, 1fr)`,
-                    gap: toVw(48),
-                    width: '100%',
-                }}
-            >
-                {profileData.experiences.map((exp, expIndex) => (
-                    <div
-                        key={expIndex}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: toVw(16),
-                        }}
-                    >
-                        <h4 style={{
-                            fontSize: toVw(16),
-                            fontWeight: '700',
-                            margin: 0,
-                            marginBottom: toVw(8),
-                            color: isDark ? '#ffffff' : '#000000',
-                        }}>
-                            {exp.title}
-                        </h4>
+                {/* Experience Sections */}
+                <div
+                    className="about-experience"
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: `repeat(3, 1fr)`,
+                        gap: toVw(48),
+                        width: '100%',
+                        position: 'absolute',
+                        top: 0,
+                    }}
+                >
+                    {profileData.experiences.map((exp, expIndex) => (
+                        <div
+                            key={expIndex}
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: toVw(16),
+                            }}
+                        >
+                            <h4 style={{
+                                fontSize: toVw(16),
+                                fontWeight: '700',
+                                margin: 0,
+                                marginBottom: toVw(8),
+                                color: isDark ? '#ffffff' : '#000000',
+                            }}>
+                                {exp.title}
+                            </h4>
 
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: toVw(8),
-                        }}>
-                            {exp.items.map((item, itemIndex) => (
-                                <div
-                                    key={itemIndex}
-                                    style={{
-                                        fontSize: toVw(13),
-                                        color: isDark ? '#aaaaaa' : '#666666',
-                                        paddingLeft: toVw(16),
-                                        position: 'relative',
-                                    }}
-                                >
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: toVw(8),
+                            }}>
+                                {exp.items.map((item, itemIndex) => (
+                                    <div
+                                        key={itemIndex}
+                                        style={{
+                                            fontSize: toVw(13),
+                                            color: isDark ? '#aaaaaa' : '#666666',
+                                            paddingLeft: toVw(16),
+                                            position: 'relative',
+                                        }}
+                                    >
                   <span style={{
                       position: 'absolute',
                       left: 0,
                       color: isDark ? '#666666' : '#999999',
                   }}>•</span>
-                                    {item}
-                                </div>
-                            ))}
+                                        {item}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
-        </div>
+        </section>
     );
 };
