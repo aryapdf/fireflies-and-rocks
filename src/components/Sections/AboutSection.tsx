@@ -224,6 +224,7 @@ export default function AboutSection() {
                         width: '100%',
                         marginBottom: toVw(80),
                         position: 'absolute',
+                        opacity: 0,
                         top: 0,
                     }}
                 >
@@ -294,6 +295,7 @@ export default function AboutSection() {
                         gap: toVw(48),
                         width: '100%',
                         position: 'absolute',
+                        opacity: 0,
                         top: 0,
                     }}
                 >

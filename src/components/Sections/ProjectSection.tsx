@@ -18,6 +18,7 @@ export default function ProjectSection () {
                 width: '100%',
                 minHeight: '100vh',
                 display: 'flex',
+
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -168,8 +169,8 @@ export default function ProjectSection () {
                                             textTransform: 'lowercase',
                                         }}
                                     >
-                    {tech}
-                  </span>
+                                        {tech}
+                                    </span>
                                 ))}
                             </div>
                         </div>
