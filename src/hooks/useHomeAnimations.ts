@@ -40,12 +40,12 @@ export const useHomeAnimations = () => {
                 scale: 0.8,
                 rotateX: -15,
                 y: -100,
-                duration: 3,
+                duration: 10,
                 ease: 'power3.in',
             })
             .to(particlesObj, {
-                z: 8,
-                duration: 4,
+                z: 5,
+                duration: 10,
                 ease: 'power4.inOut',
                 onUpdate: updateParticles
             }, '<')
@@ -66,7 +66,7 @@ export const useHomeAnimations = () => {
                 x: 5,
                 y: -2,
                 rotation: 360,
-                duration: 6,
+                duration: 10,
                 ease: 'sine.inOut',
                 onUpdate: updateParticles
             }, '<')
@@ -123,16 +123,6 @@ export const useHomeAnimations = () => {
         // ========================================
         mainTL
             .addLabel('cards-exit')
-            // Particles explode outward
-            .to(particlesObj, {
-                x: 0,
-                y: 0,
-                z: 0,
-                duration: 3,
-                ease: 'power4.in',
-                onUpdate: updateParticles
-            })
-            // Cards fly away with rotation
             .to('.contribution-title', {
                 opacity: 0,
                 y: -80,
@@ -175,8 +165,8 @@ export const useHomeAnimations = () => {
             .to(particlesObj, {
                 x: -5,
                 y: 2,
-                z: 3,
-                duration: 3,
+                z: 5,
+                duration: 10,
                 ease: 'power2.out',
                 onUpdate: updateParticles
             })
@@ -274,7 +264,7 @@ export const useHomeAnimations = () => {
                 x: 5,
                 y: 2,
                 z: 5,
-                duration: 3,
+                duration: 10,
                 ease: 'sine.inOut',
                 onUpdate: updateParticles
             })
@@ -294,7 +284,7 @@ export const useHomeAnimations = () => {
                     duration: 3,
                     ease: 'power3.out'
                 },
-                '<'
+                '>'
             )
             // 1. Title About Me muncul dengan glitch effect
             .fromTo('.about-title',
@@ -332,7 +322,7 @@ export const useHomeAnimations = () => {
                     duration: 2.5,
                     ease: 'power2.out'
                 },
-                '>-1.5'
+                '>'
             )
             // Hold title dan profile
             .to({}, { duration: 2 });
@@ -378,12 +368,11 @@ export const useHomeAnimations = () => {
             );
         });
 
-        // Hold skills grid
-        mainTL.to('.about-skills', { duration: 3 });
 
         // 4. Skills grid keluar, Experience section muncul
-        mainTL.addLabel('skills-to-experience');
-
+        mainTL
+            .addLabel('skills-to-experience')
+            .to({}, { duration: 5 });
         skillCards.forEach((card: any, i: number) => {
             const randomX = gsap.utils.random(-200, 200);
             const randomY = gsap.utils.random(-150, -80);
@@ -513,19 +502,114 @@ export const useHomeAnimations = () => {
             .to('#about-section', {
                 duration: 5
             })
-
-        // Final particle drift
+        // ========================================
+        // 📧 SECTION 4: Contact Section
+        // ========================================
         mainTL
+            .addLabel('contact-start')
             .to(particlesObj, {
                 x: 0,
                 y: 0,
                 z: 0,
-                duration: 6,
+                duration: 10,
                 ease: 'sine.inOut',
                 onUpdate: updateParticles
-            })
-            .addLabel('projects-end');
+            }, 'contact-start')
+            .to(particlesObj, {}, 'contact-end')
+            // Contact section fade in
+            .fromTo('#contact-section',
+                {
+                    opacity: 0,
+                    y: 80,
+                    scale: 0.95,
+                    filter: 'blur(20px)'
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    filter: 'blur(0px)',
+                    duration: 3,
+                    ease: 'power3.out'
+                },
+                'contact-start'
+            )
+            // Title appears
+            .fromTo('.contact-title',
+                {
+                    opacity: 0,
+                    y: 60,
+                    scale: 0.8,
+                    filter: 'blur(15px)'
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    filter: 'blur(0px)',
+                    duration: 2.5,
+                    ease: 'back.out(1.4)'
+                },
+                '<+0.5'
+            );
 
+        // Social icons appear with stagger
+        const socialIcons = gsap.utils.toArray('.social-icon');
+        socialIcons.forEach((icon: any, i: number) => {
+            mainTL.fromTo(icon,
+                {
+                    opacity: 0,
+                    y: 80,
+                    scale: 0.6,
+                    rotateY: -45,
+                    filter: 'blur(10px)'
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    rotateY: 0,
+                    filter: 'blur(0px)',
+                    duration: 2,
+                    ease: 'back.out(1.7)'
+                },
+                i === 0 ? '>-0.5' : '>-1.5'
+            );
+        });
+
+        mainTL
+            // Order of service appears
+            .fromTo('.contact-order',
+                {
+                    opacity: 0,
+                    y: 40,
+                    filter: 'blur(10px)'
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                    duration: 2,
+                    ease: 'power2.out'
+                },
+                '>-0.5'
+            )
+            // Footer appears
+            .fromTo('.contact-footer',
+                {
+                    opacity: 0,
+                    y: 30
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 2,
+                    ease: 'power2.out'
+                },
+                '>-1'
+            )
+            .addLabel('contact-end')
+            .addLabel('projects-end');
 
         mainTlRef.current = mainTL;
 

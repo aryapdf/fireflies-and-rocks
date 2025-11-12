@@ -13,6 +13,7 @@ import { gsap } from 'gsap';
 import Contributions from "@/components/Sections/Contributions";
 import ProjectSection from "@/components/Sections/ProjectSection";
 import AboutSection from "@/components/Sections/AboutSection";
+import ContactSection from "@/components/Sections/ContactSection";
 
 gsap.registerPlugin(ScrollToPlugin);
 
@@ -65,6 +66,8 @@ export default function Page() {
                     <ProjectSection />
 
                     <AboutSection />
+
+                    <ContactSection />
                 </main>
             </div>
         </div>
