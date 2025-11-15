@@ -23,7 +23,7 @@ export const useHomeAnimations = () => {
             scrollTrigger: {
                 trigger: '#main-page',
                 start: 'top top',
-                end: '+=1000%',
+                end: '+=2000%',
                 scrub: 1.8,
                 pin: true,
             },
@@ -44,11 +44,11 @@ export const useHomeAnimations = () => {
                 ease: 'power3.in',
             })
             .to(particlesObj, {
-                z: 5,
+                z: 7,
                 duration: 10,
                 ease: 'power4.inOut',
                 onUpdate: updateParticles
-            }, '<')
+            }, '<=')
             .addLabel('intro-end');
 
         // ========================================
@@ -115,13 +115,8 @@ export const useHomeAnimations = () => {
             );
         });
 
-        // Hold cards on screen
-        mainTL.to('#contribution-section', { duration: 4 });
-
-        // ========================================
-        // 🌠 TRANSITION: Particle Explosion
-        // ========================================
         mainTL
+            .to({}, { duration: 5 }, '+=5')
             .addLabel('cards-exit')
             .to('.contribution-title', {
                 opacity: 0,
@@ -165,7 +160,7 @@ export const useHomeAnimations = () => {
             .to(particlesObj, {
                 x: -5,
                 y: 2,
-                z: 5,
+                z: 7,
                 duration: 10,
                 ease: 'power2.out',
                 onUpdate: updateParticles
@@ -228,8 +223,7 @@ export const useHomeAnimations = () => {
         });
 
         // Hold scroll
-        mainTL.to('#project-section', {duration: 4})
-
+        mainTL.to({}, { duration: 5 }, '+=5')
             .to('.project-title',
                 {
                     opacity: 0,
@@ -263,7 +257,7 @@ export const useHomeAnimations = () => {
             .to(particlesObj, {
                 x: 5,
                 y: 2,
-                z: 5,
+                z: 7,
                 duration: 10,
                 ease: 'sine.inOut',
                 onUpdate: updateParticles
@@ -371,6 +365,7 @@ export const useHomeAnimations = () => {
 
         // 4. Skills grid keluar, Experience section muncul
         mainTL
+            .to({}, { duration: 5 }, '+=5')
             .addLabel('skills-to-experience')
             .to({}, { duration: 5 });
         skillCards.forEach((card: any, i: number) => {
@@ -492,7 +487,7 @@ export const useHomeAnimations = () => {
             .to(particlesObj, {
                 x: 0,
                 y: 0,
-                z: 5,
+                z: 7,
                 rotation: 0,
                 duration: 6,
                 ease: 'sine.inOut',
