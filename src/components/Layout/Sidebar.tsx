@@ -2,6 +2,7 @@
 'use client';
 
 import {
+    ForwardedRef,
     forwardRef,
     useCallback,
     useEffect,
@@ -23,7 +24,7 @@ export interface SidebarHandle {
     toggleSidebar: () => void;
 }
 
-const Sidebar = forwardRef<SidebarHandle, object>((props, ref) => {
+function Sidebar(props: object, ref: ForwardedRef<SidebarHandle>) {
     const [active, setActive] = useState<string>('home');
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const [isVisible, setIsVisible] = useState<boolean>(true);
@@ -46,11 +47,6 @@ const Sidebar = forwardRef<SidebarHandle, object>((props, ref) => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
     }, []);
-
-    const handleMouseEnterSidebar = () => {
-        setIsVisible(true);
-        resetTimer();
-    };
 
     const handleClick = (val: string) => {
         setActive(val);
@@ -100,6 +96,7 @@ const Sidebar = forwardRef<SidebarHandle, object>((props, ref) => {
             transform: isVisible ? 'translateX(0)' : `translateX(${toVw(-20)})`,
             pointerEvents: isVisible ? ('auto' as const) : ('none' as const),
             transition: 'opacity 0.4s ease, transform 0.4s ease',
+            zIndex: 10
         },
         trigger: {
             width: toVw(24),
@@ -108,7 +105,6 @@ const Sidebar = forwardRef<SidebarHandle, object>((props, ref) => {
             transform: isVisible ? `translateX(${toVw(-20)})` : 'translateX(0)',
             pointerEvents: isVisible ? ('none' as const) : ('auto' as const),
             transition: 'opacity 0.4s ease, transform 0.4s ease',
-            marginRight: toVw(10),
             cursor: 'pointer',
         },
         navLink: {
@@ -139,7 +135,7 @@ const Sidebar = forwardRef<SidebarHandle, object>((props, ref) => {
             <nav
                 className="sidebar"
                 style={styles.sidebar}
-                onMouseEnter={handleMouseEnterSidebar}
+                onMouseEnter={() => setIsVisible(true)}
                 onMouseLeave={resetTimer}
             >
                 {NAV_ITEMS.map((item) => (
@@ -154,27 +150,27 @@ const Sidebar = forwardRef<SidebarHandle, object>((props, ref) => {
                             opacity: hoveredLink === item ? 0.6 : 1,
                         }}
                     >
-            <span style={{ position: 'relative', display: 'inline-block' }}>
-              {item}
-                <span
-                    style={{
-                        position: 'absolute',
-                        bottom: toVw(10),
-                        left: toVw(16),
-                        width: active === item ? '100%' : '0%',
-                        height: toVw(2),
-                        backgroundColor: 'currentColor',
-                        transition: 'width 0.2s ease-in-out',
-                        rotate: '90deg',
-                    }}
-                />
-            </span>
+                        <span style={{ position: 'relative', display: 'inline-block' }}>
+                          {item}
+                        <span
+                            style={{
+                                position: 'absolute',
+                                bottom: toVw(10),
+                                left: toVw(16),
+                                width: active === item ? '100%' : '0%',
+                                height: toVw(2),
+                                backgroundColor: 'currentColor',
+                                transition: 'width 0.2s ease-in-out',
+                                rotate: '90deg',
+                            }}
+                        />
+                        </span>
                     </button>
                 ))}
             </nav>
         </div>
     );
-});
+}
 
 Sidebar.displayName = 'Sidebar';
-export default Sidebar;
+export default forwardRef(Sidebar);
