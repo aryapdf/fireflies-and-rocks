@@ -4,12 +4,14 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ParticlesRef } from '@/components/Reactbits/Particles';
+import { SidebarHandle } from "@/components/Layout/Sidebar";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const useHomeAnimations = () => {
     const particlesRef = useRef<ParticlesRef>(null);
     const mainTlRef = useRef<gsap.core.Timeline | null>(null);
+    const sidebarRef = useRef<SidebarHandle>(null);
 
     useGSAP(() => {
         const particlesObj = { x: 0, y: 0, z: 0, rotation: 0 };
@@ -73,7 +75,7 @@ export const useHomeAnimations = () => {
             .to({}, { duration: 4 })
             .to('.main-text', { opacity: 0, scale: 0.8, rotateX: -15, y: -100, duration: 4, ease: 'power3.in' }, '>')
             .to(particlesObj, { z: 7, duration: 10, ease: 'power4.inOut', onUpdate: updateParticles }, '<')
-            .to('.header-logo, .header-right', { opacity: 0, scale: 0.8, y: -20, duration: 4, ease: 'power3.in' }, '<')
+            .to('.header-logo, .header-right', { opacity: 0, scale: 0.8, y: -20, duration: 4, ease: 'power3.in', onComplete: () => sidebarRef.current?.enableAutoHide() }, '<')
             .addLabel('intro-end');
 
         // ========================================
@@ -225,5 +227,5 @@ export const useHomeAnimations = () => {
         };
     }, []);
 
-    return { particlesRef, mainTlRef };
+    return { particlesRef, mainTlRef, sidebarRef };
 };

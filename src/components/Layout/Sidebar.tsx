@@ -1,14 +1,77 @@
 // src/components/Layout/Sidebar.tsx
 'use client';
 
-import {useState} from 'react';
+import {forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState} from 'react';
 import { toVw } from '@/utils/toVw';
 
 const NAV_ITEMS = ['home', 'cases', 'projects', 'about me', 'contact'];
+const AUTO_HIDE_DELAY = 3000;
 
-export default function Sidebar() {
+export interface SidebarHandle {
+    enableAutoHide: () => void;
+    disableAutoHide: () => void;
+    showSidebar: () => void;
+    hideSidebar: () => void;
+    toggleSidebar: () => void;
+}
+
+const Sidebar = forwardRef<SidebarHandle, object>((props, ref) => {
     const [active, setActive] = useState<string>('home')
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+    const [isVisible, setIsVisible] = useState<boolean>(true);
+    const [isAutoHideEnabled, setIsAutoHideEnabled] = useState<boolean>(false)
+
+    const timerRef = useRef<any>(null);
+
+    const resetTimer = useCallback(() => {
+        if (!isAutoHideEnabled || !isVisible) return;
+
+        if (timerRef.current) clearTimeout(timerRef.current);
+
+        timerRef.current = setTimeout(() => setIsVisible(false), AUTO_HIDE_DELAY);
+    }, [isAutoHideEnabled, isVisible])
+
+    useEffect(() => {
+        return () => {
+            if (timerRef.current) clearTimeout(timerRef.current);
+        };
+    }, []);
+
+    const handleMouseEnterSidebar = () => {
+        setIsVisible(true);
+        resetTimer();
+    }
+
+    const handleClick = (val:any) => {
+        setActive(val);
+        resetTimer();
+    }
+
+    const enableAutoHide = () => {
+        setIsAutoHideEnabled(true);
+        resetTimer();
+    }
+
+    const disableAutoHide = () => {
+        setIsAutoHideEnabled(true);
+        if (timerRef.current) {
+            clearTimeout(timerRef.current)
+            timerRef.current = null;
+        }
+    }
+
+    const showSidebar = () => setIsVisible(true);
+    const hideSidebar = () => setIsVisible(false);
+    const toggleSidebar = () => setIsVisible(prev => !prev);
+
+    // Expose func using useImperativeHandle
+    useImperativeHandle(ref, () => ({
+        enableAutoHide,
+        disableAutoHide,
+        showSidebar,
+        hideSidebar,
+        toggleSidebar,
+    }));
 
     const styles = {
         sidebar: {
@@ -19,6 +82,8 @@ export default function Sidebar() {
             display: 'flex',
             flexDirection: 'column' as const,
             gap: toVw(40),
+            opacity: isVisible ? 1 : 0,
+            pointerEvents: isVisible ? ('auto' as const) : ('none' as const),
             zIndex: 100,
         },
         navLink: {
@@ -33,13 +98,8 @@ export default function Sidebar() {
         },
     };
 
-    function handleClick(val:string) {
-        setActive(val)
-        return
-    }
-
     return (
-        <nav style={styles.sidebar}>
+        <nav style={styles.sidebar} onMouseEnter={handleMouseEnterSidebar} onMouseLeave={resetTimer}>
             {NAV_ITEMS.map((item) => (
                 <button
                     key={item}
@@ -73,8 +133,10 @@ export default function Sidebar() {
                       />
                   </span>
                 </button>
-
             ))}
         </nav>
     );
-}
+});
+
+Sidebar.displayName = 'Sidebar';
+export default Sidebar;
