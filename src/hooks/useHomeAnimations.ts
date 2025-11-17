@@ -4,7 +4,7 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ParticlesRef } from '@/components/Reactbits/Particles';
-import { SidebarHandle } from "@/components/Layout/Sidebar";
+import sidebar, { SidebarHandle } from "@/components/Layout/Sidebar";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -75,7 +75,17 @@ export const useHomeAnimations = () => {
             .to({}, { duration: 4 })
             .to('.main-text', { opacity: 0, scale: 0.8, rotateX: -15, y: -100, duration: 4, ease: 'power3.in' }, '>')
             .to(particlesObj, { z: 7, duration: 10, ease: 'power4.inOut', onUpdate: updateParticles }, '<')
-            .to('.header-logo, .header-right', { opacity: 0, scale: 0.8, y: -20, duration: 4, ease: 'power3.in', onComplete: () => sidebarRef.current?.enableAutoHide() }, '<')
+            .to('.header-logo, .header-right', { opacity: 0, scale: 0.8, y: -20, duration: 4, ease: 'power3.in' }, '<')
+            .to({}, {
+                duration: 0, onComplete: () => {
+                    sidebarRef.current?.enableAutoHide();
+                    sidebarRef.current?.hideSidebar();
+                },
+                onReverseComplete: () => {
+                    sidebarRef.current?.disableAutoHide();
+                    sidebarRef.current?.showSidebar();
+                }
+                }, '>')
             .addLabel('intro-end');
 
         // ========================================

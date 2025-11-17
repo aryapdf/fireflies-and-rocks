@@ -1,10 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import {useRef, useState} from 'react';
 import { useTheme } from '@/hooks/useTheme';
 import { useHomeAnimations } from '@/hooks/useHomeAnimations';
 import Header from '@/components/Layout/Header';
-import Sidebar from '@/components/Layout/Sidebar';
 import DarkModeToggle from '@/components/Layout/DarkModeToggle';
 import ParticlesBackground from '@/components/Layout/ParticlesBackground';
 import HeroSection from '@/components/Sections/HeroSection';
@@ -14,12 +13,13 @@ import Contributions from "@/components/Sections/Contributions";
 import ProjectSection from "@/components/Sections/ProjectSection";
 import AboutSection from "@/components/Sections/AboutSection";
 import ContactSection from "@/components/Sections/ContactSection";
+import Sidebar from "@/components/Layout/Sidebar"
 
 gsap.registerPlugin(ScrollToPlugin);
 
 export default function Page() {
     const { isDark } = useTheme();
-    const { particlesRef, mainTlRef } = useHomeAnimations();
+    const { particlesRef, mainTlRef, sidebarRef } = useHomeAnimations();
 
     const [jumboText] = useState<string[]>([
         'Front end. web (developer)',
@@ -43,9 +43,8 @@ export default function Page() {
 
             <div style={{ position: 'relative', zIndex: 5 }}>
                 <Header />
-                <Sidebar />
-                <DarkModeToggle />
-
+                <Sidebar ref={sidebarRef} />
+                {/*<DarkModeToggle />*/}
                 <main
                     id="main-page"
                     style={{
