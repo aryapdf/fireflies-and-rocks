@@ -60,8 +60,8 @@ export const useHomeAnimations = () => {
             scrollTrigger: {
                 trigger: '#main-page',
                 start: 'top top',
-                end: '+=2000%',
-                scrub: 1.8,
+                end: '+=4000%',
+                scrub: 3,
                 pin: true,
             },
             defaults: { ease: 'power2.inOut' }
@@ -125,7 +125,7 @@ export const useHomeAnimations = () => {
                 duration: 0,
                 onReverseComplete: () => sidebarRef.current?.activeCurrentSection('cases'),
             }, '>')
-            .to(particlesObj, { x: -5, y: 2, z: 7, duration: 10, ease: 'power2.out', onUpdate: updateParticles })
+            .to(particlesObj, { x: -5, y: 2, z: 7, duration: 10, ease: 'sine.inOut', onUpdate: updateParticles })
             .to({}, {
                 duration: 0,
                 onComplete: () => sidebarRef.current?.activeCurrentSection('projects'),
@@ -227,6 +227,10 @@ export const useHomeAnimations = () => {
         // ========================================
         mainTL
             .addLabel('contact-start')
+            .to({}, {
+                duration: 0,
+                onComplete: () => sidebarRef.current?.activeCurrentSection('cases'),
+            }, '>')
             .to(particlesObj, { x: 0, y: 0, z: 0, duration: 10, ease: 'sine.inOut', onUpdate: updateParticles }, 'contact-start')
             .to(particlesObj, {}, 'contact-end')
             .fromTo('#contact-section', fadeInUp, fadeInUpTo, 'contact-start')
