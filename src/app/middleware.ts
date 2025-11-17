@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-    const isAdminRoute = req.nextUrl.pathname.startsWith("/(admin)");
+    const isAdminRoute = req.nextUrl.pathname.startsWith("/(dashboard)");
     const isLoggedIn = req.cookies.get("session_token");
 
     if (isAdminRoute && !isLoggedIn) {
@@ -12,5 +12,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/(admin)/:path*"],
+    matcher: ["/(dashboard)/:path*"],
 };

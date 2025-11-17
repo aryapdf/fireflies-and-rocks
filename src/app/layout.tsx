@@ -3,7 +3,7 @@
 import "./globals.css";
 import StoreProvider from "@/providers/StoreProvider";
 import ThemeSync from "@/components/Theme/ThemeSync";
-import {fonts} from "@/utils/font";
+import {manrope} from "@/utils/font";
 
 export default function RootLayout({
                                      children,
@@ -12,7 +12,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body style={{ fontFamily:fonts.manrope }}>
+      <body className={manrope.className}>
         <StoreProvider>
           <ThemeSync />
           {children}
