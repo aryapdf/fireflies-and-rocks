@@ -24,15 +24,15 @@ const ParticlesBackground: React.FC<ParticlesBackgroundProps> = ({ particlesRef,
         }}>
             <div style={{
                 position: 'absolute',
-                width: '200vw',
-                height: '200vh',
+                width: '100vw',
+                height: '100vh',
             }}>
                 <Particles
                     ref={particlesRef}
                     particleColors={particleColor}
-                    particleCount={10000}
+                    particleCount={5000}
                     particleSpread={15}
-                    speed={0.1}
+                    speed={.2}
                     particleBaseSize={100}
                     alphaParticles={false}
                     disableRotation={false}
