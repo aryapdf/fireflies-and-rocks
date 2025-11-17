@@ -92,27 +92,44 @@ export const useHomeAnimations = () => {
         // CONTRIBUTIONS
         // ========================================
         mainTL
-            .addLabel('cards-start')
+            .addLabel('contributions-start')
             .to('#contribution-section', { opacity: 1, scale: 1, duration: 0 })
+            .to({}, {
+                duration: 0,
+                onReverseComplete: () => sidebarRef.current?.activeCurrentSection('home'),
+            }, '>')
             .to(particlesObj, { x: 5, y: -2, rotation: 360, duration: 10, ease: 'sine.inOut', onUpdate: updateParticles }, '<')
+            .to({}, {
+                duration: 0,
+                onComplete: () => sidebarRef.current?.activeCurrentSection('cases'),
+            }, '>')
             .fromTo('.contribution-title', glitchIn, glitchInTo);
 
         staggerReveal(mainTL, cards, hologramIn, hologramInTo);
 
         mainTL
             .to({}, { duration: 5 }, '+=5')
-            .addLabel('cards-exit')
             .to('.contribution-title', { opacity: 0, y: -80, scale: 0.6, rotateX: -45, filter: 'blur(20px)', duration: 2.5, ease: 'power3.in' }, '<');
 
         staggerExplosion(mainTL, cards);
-        mainTL.to('#contribution-section', { opacity: 0, duration: 0 });
+        mainTL
+            .to('#contribution-section', { opacity: 0, duration: 0 })
+            .addLabel('contributions-end')
 
         // ========================================
         // PROJECTS
         // ========================================
         mainTL
             .addLabel('projects-start')
+            .to({}, {
+                duration: 0,
+                onReverseComplete: () => sidebarRef.current?.activeCurrentSection('cases'),
+            }, '>')
             .to(particlesObj, { x: -5, y: 2, z: 7, duration: 10, ease: 'power2.out', onUpdate: updateParticles })
+            .to({}, {
+                duration: 0,
+                onComplete: () => sidebarRef.current?.activeCurrentSection('projects'),
+            }, '>')
             .fromTo('#project-section', fadeInUp, fadeInUpTo)
             .fromTo('.project-title',
                 { opacity: 0, y: 80, scaleX: 0.5, filter: 'blur(15px)' },
@@ -142,7 +159,15 @@ export const useHomeAnimations = () => {
         // ========================================
         mainTL
             .addLabel('about-start')
+            .to({}, {
+                duration: 0,
+                onReverseComplete: () => sidebarRef.current?.activeCurrentSection('projects'),
+            }, '>')
             .to(particlesObj, { x: 5, y: 2, z: 7, duration: 10, ease: 'sine.inOut', onUpdate: updateParticles })
+            .to({}, {
+                duration: 0,
+                onComplete: () => sidebarRef.current?.activeCurrentSection('about me'),
+            }, '>')
             .fromTo('#about-section', fadeInUp, fadeInUpTo, '>')
             .fromTo('.about-title', glitchIn, glitchInTo, '<+0.5')
             .fromTo('.about-profile',
@@ -189,6 +214,10 @@ export const useHomeAnimations = () => {
 
         mainTL
             .to('#about-section', { opacity: 0, duration: 0 })
+            .to({}, {
+                duration: 0,
+                onReverseComplete: () => sidebarRef.current?.activeCurrentSection('about me'),
+            }, '>')
             .to(particlesObj, { x: 0, y: 0, z: 7, rotation: 0, duration: 6, ease: 'sine.inOut', onUpdate: updateParticles })
             .addLabel('about-end')
             .to('#about-section', { duration: 5 });

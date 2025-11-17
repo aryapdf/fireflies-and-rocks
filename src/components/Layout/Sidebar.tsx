@@ -22,6 +22,7 @@ export interface SidebarHandle {
     showSidebar: () => void;
     hideSidebar: () => void;
     toggleSidebar: () => void;
+    activeCurrentSection: (val:string) => void;
 }
 
 function Sidebar(props: object, ref: ForwardedRef<SidebarHandle>) {
@@ -48,6 +49,10 @@ function Sidebar(props: object, ref: ForwardedRef<SidebarHandle>) {
         };
     }, []);
 
+    useEffect(() => {
+        console.log('Current Section:', active)
+    }, [active]);
+
     const handleClick = (val: string) => {
         setActive(val);
         resetTimer();
@@ -69,6 +74,7 @@ function Sidebar(props: object, ref: ForwardedRef<SidebarHandle>) {
     const showSidebar = () => setIsVisible(true);
     const hideSidebar = () => setIsVisible(false);
     const toggleSidebar = () => setIsVisible((prev) => !prev);
+    const activeCurrentSection = (val:string) => setActive(val);
 
     useImperativeHandle(ref, () => ({
         enableAutoHide,
@@ -76,12 +82,13 @@ function Sidebar(props: object, ref: ForwardedRef<SidebarHandle>) {
         showSidebar,
         hideSidebar,
         toggleSidebar,
+        activeCurrentSection
     }));
 
     const styles = {
         container: {
             position: 'fixed' as const,
-            left: toVw(30),
+            left: toVw(40),
             top: '50%',
             transform: 'translateY(-50%)',
             zIndex: 1000,
@@ -106,6 +113,7 @@ function Sidebar(props: object, ref: ForwardedRef<SidebarHandle>) {
             pointerEvents: isVisible ? ('none' as const) : ('auto' as const),
             transition: 'opacity 0.4s ease, transform 0.4s ease',
             cursor: 'pointer',
+            position: 'absolute' as const
         },
         navLink: {
             writingMode: 'sideways-lr' as const,
