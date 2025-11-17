@@ -46,8 +46,8 @@ export default function Header({ isDark }: HeaderProps) {
 
     return (
         <header style={styles.header}>
-            <div style={styles.logo}>badcable.</div>
-            <div style={styles.headerRight}>
+            <div className="header-logo" style={styles.logo}>badcable.</div>
+            <div className="header-right" style={styles.headerRight}>
                 <div><TextUnderline text={'se'} />lf service</div>
                 {/*<span style={styles.discount}>20% OFF</span>*/}
             </div>

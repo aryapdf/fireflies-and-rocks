@@ -209,7 +209,6 @@ export default function ContactSection() {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     paddingTop: toVw(60),
-                    borderTop: `1px solid ${isDark ? '#333333' : '#e0e0e0'}`,
                 }}
             >
                 {/* Logo */}
@@ -218,7 +217,7 @@ export default function ContactSection() {
                     fontWeight: '700',
                     color: isDark ? '#ffffff' : '#000000',
                 }}>
-                    mrk.
+                    badcable.
                 </div>
 
                 {/* Credit */}
