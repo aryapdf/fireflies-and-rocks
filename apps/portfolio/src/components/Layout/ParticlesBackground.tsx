@@ -20,7 +20,8 @@ const ParticlesBackground: React.FC<ParticlesBackgroundProps> = ({ particlesRef,
             inset: -1,
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            background: 'black'
         }}>
             <div style={{
                 position: 'absolute',
@@ -30,9 +31,9 @@ const ParticlesBackground: React.FC<ParticlesBackgroundProps> = ({ particlesRef,
                 <Particles
                     ref={particlesRef}
                     particleColors={particleColor}
-                    particleCount={5000}
+                    particleCount={2000}
                     particleSpread={15}
-                    speed={.2}
+                    speed={.05}
                     particleBaseSize={100}
                     alphaParticles={false}
                     disableRotation={false}
