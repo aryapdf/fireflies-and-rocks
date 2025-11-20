@@ -1,0 +1,16 @@
+{
+  "name": "fireflies-and-rocks-monorepo",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint"
+  },
+  "devDependencies": {
+    "turbo": "^2.6.1"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
