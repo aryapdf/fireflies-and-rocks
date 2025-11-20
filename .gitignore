@@ -11,6 +11,8 @@
 # next.js
 /.next/
 /out/
+apps/portfolio/.next
+/.turbo
 
 # production
 /build
