@@ -35,7 +35,7 @@ const ParticlesBackground: React.FC<ParticlesBackgroundProps> = ({ particlesRef,
                     particleSpread={15}
                     speed={.05}
                     particleBaseSize={100}
-                    alphaParticles={false}
+                    alphaParticles={true}
                     disableRotation={false}
                     cameraDistance={25}
                 />

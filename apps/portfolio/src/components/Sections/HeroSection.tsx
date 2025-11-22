@@ -30,10 +30,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ jumboText, isFrozen }) => {
                 height: 'fit-content',
                 padding: `${toVw(16)} ${toVw(40)}`,
                 borderRadius: 12,
-                border: '3px solid var(--foreground)',
-                background: 'rgba(0, 0, 0, 0.7)',
-                isolation: 'isolate',
-                transform: 'translateZ(0)',
             }}
         >
             <TextType
