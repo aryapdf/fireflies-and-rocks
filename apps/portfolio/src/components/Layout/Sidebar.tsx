@@ -12,9 +12,6 @@ import {
 } from 'react';
 import { toVw } from '@/utils/toVw';
 import { ChevronRightIcon } from 'lucide-react';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setActiveSection } from '@/store/slices/sidebarSlice';
-import { scrollToLabel } from '@/utils/scrollToLabel';
 
 const NAV_ITEMS = ['home', 'cases', 'projects', 'about me', 'contact'];
 const AUTO_HIDE_DELAY = 1000;
@@ -29,10 +26,7 @@ export interface SidebarHandle {
 }
 
 function Sidebar(props: object, ref: ForwardedRef<SidebarHandle>) {
-    const dispatch = useAppDispatch();
-    const activeSection = useAppSelector(state => state.sidebar);
-    const mainTimeline = useAppSelector(state => state.animation.mainTimeline);
-
+    const [active, setActive] = useState<string>('home');
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const [isVisible, setIsVisible] = useState<boolean>(true);
     const [isAutoHideEnabled, setIsAutoHideEnabled] = useState<boolean>(false);
@@ -56,24 +50,11 @@ function Sidebar(props: object, ref: ForwardedRef<SidebarHandle>) {
     }, []);
 
     useEffect(() => {
-        console.log('Current Section:', activeSection)
-    }, [activeSection]);
+        console.log('Current Section:', active)
+    }, [active]);
 
     const handleClick = (val: string) => {
-        dispatch(setActiveSection(val))
-        if (!mainTimeline) return;
-
-        const labelMap: Record<string, string> = {
-              'home': 'intro-start',
-              'cases': 'contributions-start',
-              'projects': 'projects-start',
-              'about me': 'about-start',
-              'contact': 'contact-start',
-        };
-
-        const label = labelMap[val] || val;
-
-        scrollToLabel(mainTimeline, label, 1)
+        setActive(val);
         resetTimer();
     };
 
@@ -93,7 +74,7 @@ function Sidebar(props: object, ref: ForwardedRef<SidebarHandle>) {
     const showSidebar = () => setIsVisible(true);
     const hideSidebar = () => setIsVisible(false);
     const toggleSidebar = () => setIsVisible((prev) => !prev);
-    const activeCurrentSection = (val:string) => dispatch(setActiveSection(val));
+    const activeCurrentSection = (val:string) => setActive(val);
 
     useImperativeHandle(ref, () => ({
         enableAutoHide,
@@ -184,7 +165,7 @@ function Sidebar(props: object, ref: ForwardedRef<SidebarHandle>) {
                                 position: 'absolute',
                                 bottom: toVw(10),
                                 left: toVw(16),
-                                width: activeSection === item ? '100%' : '0%',
+                                width: active === item ? '100%' : '0%',
                                 height: toVw(2),
                                 backgroundColor: 'currentColor',
                                 transition: 'width 0.2s ease-in-out',

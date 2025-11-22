@@ -4,9 +4,7 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ParticlesRef } from '@/components/Reactbits/Particles';
-import { SidebarHandle } from "@/components/Layout/Sidebar";
-import { useAppDispatch } from '@/store/hooks';
-import { setMainTimeline } from '@/store/slices/animationSlice';
+import sidebar, { SidebarHandle } from "@/components/Layout/Sidebar";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,7 +12,6 @@ export const useHomeAnimations = () => {
     const particlesRef = useRef<ParticlesRef>(null);
     const mainTlRef = useRef<gsap.core.Timeline | null>(null);
     const sidebarRef = useRef<SidebarHandle>(null);
-    const dispatch = useAppDispatch();
 
     useGSAP(() => {
         const particlesObj = { x: 0, y: 0, z: 0, rotation: 0 };
@@ -69,7 +66,6 @@ export const useHomeAnimations = () => {
             },
             defaults: { ease: 'power2.inOut' }
         });
-        dispatch(setMainTimeline(mainTL));
 
         // ========================================
         // INTRO
