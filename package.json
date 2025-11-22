@@ -7,7 +7,11 @@
     "lint": "turbo lint"
   },
   "devDependencies": {
+    "prisma": "^7.0.0",
     "turbo": "^2.6.1"
+  },
+  "overrides": {
+    "hono": "^4.10.3"
   },
   "workspaces": [
     "apps/*",
