@@ -25,7 +25,7 @@ export const useHomeAnimations = () => {
       }
 
       const targetLabel = labels[section];
-      scrollToLabel(mainTlRef.current, targetLabel, 1);
+      scrollToLabel(mainTlRef.current, targetLabel, 1, true);
     }
 
     useGSAP(() => {
