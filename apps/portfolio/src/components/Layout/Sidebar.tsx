@@ -25,7 +25,11 @@ export interface SidebarHandle {
     activeCurrentSection: (val:string) => void;
 }
 
-function Sidebar(props: object, ref: ForwardedRef<SidebarHandle>) {
+export interface Props {
+    onSectionClick?: (val: string) => void;
+}
+
+function Sidebar(props: Props, ref: ForwardedRef<SidebarHandle>) {
     const [active, setActive] = useState<string>('home');
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const [isVisible, setIsVisible] = useState<boolean>(true);
@@ -55,6 +59,7 @@ function Sidebar(props: object, ref: ForwardedRef<SidebarHandle>) {
 
     const handleClick = (val: string) => {
         setActive(val);
+        props?.onSectionClick?.(val);
         resetTimer();
     };
 

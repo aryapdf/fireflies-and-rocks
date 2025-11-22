@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ParticlesRef } from '@/components/Reactbits/Particles';
 import sidebar, { SidebarHandle } from "@/components/Layout/Sidebar";
+import { scrollToLabel } from '@/utils/scrollToLabel';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,6 +13,20 @@ export const useHomeAnimations = () => {
     const particlesRef = useRef<ParticlesRef>(null);
     const mainTlRef = useRef<gsap.core.Timeline | null>(null);
     const sidebarRef = useRef<SidebarHandle>(null);
+    const scrollToSection = (section: string) => {
+      if (!mainTlRef.current) return;
+
+      const labels:any = {
+        'home': 'intro-start',
+        'cases': 'contributions-start',
+        'projects': 'projects-start',
+        'about me': 'about-start',
+        'contact': 'contact-start',
+      }
+
+      const targetLabel = labels[section];
+      scrollToLabel(mainTlRef.current, targetLabel, 1);
+    }
 
     useGSAP(() => {
         const particlesObj = { x: 0, y: 0, z: 0, rotation: 0 };
@@ -55,6 +70,7 @@ export const useHomeAnimations = () => {
                 }, i === 0 ? '<' : '<+0.15');
             });
         };
+
 
         const mainTL = gsap.timeline({
             scrollTrigger: {
@@ -270,5 +286,5 @@ export const useHomeAnimations = () => {
         };
     }, []);
 
-    return { particlesRef, mainTlRef, sidebarRef };
+    return { particlesRef, mainTlRef, sidebarRef, scrollToSection };
 };

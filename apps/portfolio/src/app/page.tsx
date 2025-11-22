@@ -19,7 +19,7 @@ gsap.registerPlugin(ScrollToPlugin);
 
 export default function Home() {
     const { isDark } = useTheme();
-    const { particlesRef, mainTlRef, sidebarRef } = useHomeAnimations();
+    const { particlesRef, sidebarRef, scrollToSection } = useHomeAnimations();
 
     const [jumboText] = useState<string[]>([
         'Front end. web (developer)',
@@ -43,7 +43,7 @@ export default function Home() {
 
             <div style={{ position: 'relative', zIndex: 5 }}>
                 <Header />
-                <Sidebar ref={sidebarRef} />
+                <Sidebar ref={sidebarRef} onSectionClick={scrollToSection} />
                 {/*<DarkModeToggle />*/}
                 <main
                     id="main-page"
