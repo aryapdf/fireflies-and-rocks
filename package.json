@@ -4,7 +4,10 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "db:generate": "turbo run db:generate --filter=@portfolio/db",
+    "db:push": "turbo run db:push --filter=@portfolio/db",
+    "db": "turbo run db:generate db:push --filter=@portfolio/db"
   },
   "devDependencies": {
     "prisma": "^7.0.0",

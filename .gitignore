@@ -15,6 +15,14 @@ apps/portfolio/.next
 /.turbo
 /.idea
 
+# packages
+/packages/db/generated
+/packages/db/node_modules
+/packages/db/dev.db
+/packages/db/dev.-journal
+/packages/db/prisma/dev.db
+/packages/db/prisma/dev.-journal
+
 # production
 /build
 
