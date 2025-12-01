@@ -14,19 +14,45 @@ export const useHomeAnimations = () => {
     const mainTlRef = useRef<gsap.core.Timeline | null>(null);
     const sidebarRef = useRef<SidebarHandle>(null);
     const scrollToSection = (section: string) => {
-      if (!mainTlRef.current) return;
+        if (!mainTlRef.current) return;
 
-      const labels:any = {
-        'home': 'nav-home',
-        'cases': 'nav-contributions',
-        'projects': 'nav-projects',
-        'about me': 'nav-abouts',
-        'contact': 'nav-contact',
-      }
+        const tl = mainTlRef.current;
 
-      const targetLabel = labels[section];
-      scrollToLabel(mainTlRef.current, targetLabel, 2, true);
-    }
+        const sectionOrder = ['home', 'cases', 'projects', 'about me', 'contact'] as const;
+        const labels:any = {
+            home: 'nav-home',
+            cases: 'nav-contributions',
+            projects: 'nav-projects',
+            'about me': 'nav-abouts',
+            contact: 'nav-contact',
+        } as const;
+
+        const targetLabel = labels[section];
+        if (!targetLabel) return;
+
+        // Dapatkan section saat ini dari currentLabel
+        const currentLabel = tl.currentLabel();
+        const currentSection = Object.keys(labels).find(
+            key => labels[key as keyof typeof labels] === currentLabel
+        ) || 'home'; // fallback ke home
+
+        // Jika sudah di tujuan → skip
+        if (currentSection === section) {
+            return;
+        }
+
+        // Hitung jumlah section yang dilewati
+        const currentIdx = sectionOrder.indexOf(currentSection as any);
+        const targetIdx = sectionOrder.indexOf(section as any);
+        const distance = Math.abs(targetIdx - currentIdx);
+
+        // Setiap 1 section = 2 detik
+        const duration = distance * 1.5;
+
+        console.log(`Scrolling: ${currentSection} → ${section} | ${distance} section(s) | ${duration} second(s)`);
+
+        scrollToLabel(tl, targetLabel, duration, false);
+    };
 
     useGSAP(() => {
         const particlesObj = { x: 0, y: 0, z: 0, rotation: 0 };
