@@ -17,15 +17,15 @@ export const useHomeAnimations = () => {
       if (!mainTlRef.current) return;
 
       const labels:any = {
-        'home': 'intro-start',
-        'cases': 'contributions-start',
-        'projects': 'projects-start',
-        'about me': 'about-start',
-        'contact': 'contact-start',
+        'home': 'nav-home',
+        'cases': 'nav-contributions',
+        'projects': 'nav-projects',
+        'about me': 'nav-abouts',
+        'contact': 'nav-contact',
       }
 
       const targetLabel = labels[section];
-      scrollToLabel(mainTlRef.current, targetLabel, 1, true);
+      scrollToLabel(mainTlRef.current, targetLabel, 2, true);
     }
 
     useGSAP(() => {
@@ -88,6 +88,7 @@ export const useHomeAnimations = () => {
         // ========================================
         mainTL
             .addLabel('intro-start')
+            .addLabel('nav-home')
             .to({}, { duration: 4 })
             .to('.main-text', { opacity: 0, scale: 0.8, rotateX: -15, y: -100, duration: 4, ease: 'power3.in' }, '>')
             .to(particlesObj, { z: 7, duration: 10, ease: 'power4.inOut', onUpdate: updateParticles }, '<')
@@ -124,6 +125,7 @@ export const useHomeAnimations = () => {
         staggerReveal(mainTL, cards, hologramIn, hologramInTo);
 
         mainTL
+            .addLabel('nav-contributions')
             .to({}, { duration: 5 }, '+=5')
             .to('.contribution-title', { opacity: 0, y: -80, scale: 0.6, rotateX: -45, filter: 'blur(20px)', duration: 2.5, ease: 'power3.in' }, '<');
 
@@ -156,6 +158,7 @@ export const useHomeAnimations = () => {
         staggerReveal(mainTL, projects, hologramIn, hologramInTo, -1.5);
 
         mainTL
+            .addLabel('nav-projects')
             .to({}, { duration: 5 }, '+=5')
             .to('.project-title', { opacity: 0, y: 80, scaleX: 0.5, duration: 2.5, filter: 'blur(15px)' }, '<');
 
@@ -201,6 +204,7 @@ export const useHomeAnimations = () => {
 
         mainTL
             .to({}, { duration: 5 }, '+=5')
+            .addLabel('nav-abouts')
             .addLabel('skills-to-experience')
             .to({}, { duration: 5 });
 
@@ -275,6 +279,7 @@ export const useHomeAnimations = () => {
                 { opacity: 1, y: 0, duration: 2, ease: 'power2.out' },
                 '>-1'
             )
+            .addLabel('nav-contact')
             .addLabel('contact-end')
             .addLabel('projects-end');
 
