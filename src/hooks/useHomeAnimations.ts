@@ -30,23 +30,19 @@ export const useHomeAnimations = () => {
         const targetLabel = labels[section];
         if (!targetLabel) return;
 
-        // Dapatkan section saat ini dari currentLabel
         const currentLabel = tl.currentLabel();
         const currentSection = Object.keys(labels).find(
             key => labels[key as keyof typeof labels] === currentLabel
         ) || 'home'; // fallback ke home
 
-        // Jika sudah di tujuan → skip
         if (currentSection === section) {
             return;
         }
 
-        // Hitung jumlah section yang dilewati
         const currentIdx = sectionOrder.indexOf(currentSection as any);
         const targetIdx = sectionOrder.indexOf(section as any);
         const distance = Math.abs(targetIdx - currentIdx);
 
-        // Setiap 1 section = 2 detik
         const duration = distance * 1.5;
 
         console.log(`Scrolling: ${currentSection} → ${section} | ${distance} section(s) | ${duration} second(s)`);
