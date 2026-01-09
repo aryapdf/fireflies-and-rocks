@@ -134,3 +134,62 @@ export async function deleteExperience(id: string){
 }
 
 // SKILLS
+
+export async function getSkills(category?: string) {
+    let query = await supabase
+        .from("skills")
+        .select("*")
+        .order("order_index", { ascending: true })
+        
+    if (category) {
+        query = query.eq("category", category)
+    }
+
+    const { data, error } = await query;
+    if (error) throw new Error(`Failed to fetch skilss: ${error.message}`);
+    return data as Skill[];
+}
+
+export async function getSkillById(id: string) {
+    const { data, error } = await supabase
+        .from("skills")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+    if (error) throw new Error(`Failed to fetch skill: ${error.message}`)
+    return data as Skill;
+}
+
+export async function createSkill(skill: Omit<Skill, "id" | "created_at") {
+    const { data,error } = await supabase
+        .from("skills")
+        .insert(skill)
+        .select()
+        .single();
+
+    if (error) throw new Error(`Falied to create skill: ${error.message}`)
+    return data as Skill;
+}
+
+export async function updateSkill(id: string, updates: Partial<Skill>) {
+    const { data, error } = await supabase
+        .from("skills")
+        .update(updates)
+        .eq("id", id)
+        .select()
+        .single()
+
+    if (error) throw new Error(`Failed to update skill: ${error.message}`);
+    return data as Skill;
+}
+
+export async function deleteSkill(id: string) {
+    const { error } = await supabase
+        .from("skills")
+        .delete()
+        .eq("id", id);
+
+    if (error) throw new Error(`Failed to delete skill: ${error.message}`);
+    return { sucess: true }
+}
