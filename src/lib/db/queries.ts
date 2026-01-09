@@ -16,6 +16,30 @@ export async function getProfile() {
     return data as Profile;
 }
 
+export async function updateProfile(id: string, updates: Partial<Profile>) {
+    const { data, error } = await supabase
+        .from("profiles")
+        .update({...updates, updated_at: new Date().toISOString() })
+        .eq("id", id)
+        .select()
+        .single()
+
+    if (error) throw new Error(`Failed to update profile : ${error.message}`)
+    return data as Profile;
+}
+
+export async function createProfile(profile: Omit<Profile, "id" | "created_at" | "updated_at">) {
+    const { data, error } = await supabase
+        .from("profiles")
+        .insert("profile")
+        .select()
+        .single()
+
+    if (error) throw new Error(`Failed to create profile : ${error.message}`)
+    return data as Profile;
+    
+}
+
 // PROJECTS
 
 export async function getProjects(featured?: boolean) {
