@@ -19,7 +19,7 @@ export async function getProfile() {
 // PROJECTS
 
 export async function getProjects(featured?: boolean) {
-  let query = supabase
+  let query = await supabase
     .from("projects")
     .select("*")
     .order("order_index", { ascending: true });
@@ -34,7 +34,7 @@ export async function getProjects(featured?: boolean) {
 }
 
 export async function getProjectById(id: String) {
-    let {data, error} = supabase
+    let {data, error} = await supabase
         .from("projects")
         .select("*")
         .eq("id", id)
@@ -46,7 +46,7 @@ export async function getProjectById(id: String) {
 
 
 export async function createProject(project: Omit<Project, "id" | "created_at">) {
-    const { data, error } = supabase
+    const { data, error } = await supabase
         .from("projects")
         .insert(project)
         .select()
@@ -57,7 +57,7 @@ export async function createProject(project: Omit<Project, "id" | "created_at">)
 }
 
 export async function updateProject(id: string, updates: Partial<Omit<Project, "id">>){
-    const { data, error } = supabase 
+    const { data, error } = await supabase 
         .from("projects")
         .eq("id", id)
         .select()
@@ -68,7 +68,7 @@ export async function updateProject(id: string, updates: Partial<Omit<Project, "
 }
 
 export async function deleteProject(id:string) {
-    const {error} = supabase
+    const {error} = await supabase
         .from("projects")
         .delete()
         .eq("id", id)
@@ -79,3 +79,58 @@ export async function deleteProject(id:string) {
 
 // EXPERIENCES
 
+export async function getExperiences() {
+    const { data, error } = await supabase
+        .from("experiences")
+        .select("*")
+        .order("start_date", { ascending: false });
+
+    if (error) throw new Error(`Failed to fetch experiences: ${error.message}`);
+    return data as Experience[];
+}
+
+export async function getExperienceById(id: string) {
+    const { data, error } = await supabase
+        .from("experiences")
+        .select()
+        .eq("id", id)
+        .single()
+
+    if (error) throw new Error(`Failed to fetch experience: ${error.message}`);
+    return data as Experience;
+}
+
+export async function createExperience(experience: Omit<Experience, "id" | "created_at">) {
+    const { data, error } = await supabase
+        .from("experiences")
+        .insert(experience)
+        .select()
+        .single();
+
+    if (error) throw new Error(`Failed to create experience: ${error.message}`);
+    return data as Experience;
+}
+
+export async function updateExperience(id: string, updates: Partial<Experience>) {
+    const { data, error } = await supabase
+        .from("experiences")
+        .update(updates)
+        .eq("id", id)
+        .select()
+        .single();
+
+    if (error) throw new Error(`Failed to update experience: ${error.message}`);
+    return data as Experience;
+}
+
+export async function deleteExperience(id: string){
+    const { error } = await supabase
+        .from("experience")
+        .delete()
+        .eq("id", id)
+
+    if (error) throw new Error(`Failed to delete experience: ${error.message}`)
+    return { success: true }
+}
+
+// SKILLS
