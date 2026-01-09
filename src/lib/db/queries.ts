@@ -161,7 +161,7 @@ export async function getSkillById(id: string) {
     return data as Skill;
 }
 
-export async function createSkill(skill: Omit<Skill, "id" | "created_at") {
+export async function createSkill(skill: Omit<Skill, "id" | "created_at">) {
     const { data,error } = await supabase
         .from("skills")
         .insert(skill)
@@ -191,5 +191,5 @@ export async function deleteSkill(id: string) {
         .eq("id", id);
 
     if (error) throw new Error(`Failed to delete skill: ${error.message}`);
-    return { sucess: true }
+    return { success: true }
 }
