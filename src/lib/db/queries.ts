@@ -3,16 +3,29 @@ import type { Profile, Project, Experience, Skill } from "@/lib/types/database";
 
 // PROFILES
 
-export async function getProfile() {
+export async function getProfiles() {
     const { data, error } = await supabase
         .from("profiles")
-        .select("*")
-        .single()
+        .select("*")    
+        .order("created_at", { ascending: false });
     
     if (error) {
         throw new Error(`Failed to fetch profile, Err : ${error.message}`)
     }
 
+    return data as Profile[];
+}
+
+export async function getProfileById(id: string) {
+    const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", id)
+        .single()
+
+    if (error) {
+        throw new Error(`Failed to fetch specific profile : ${error.message}`)
+    }
     return data as Profile;
 }
 
@@ -43,7 +56,7 @@ export async function createProfile(profile: Omit<Profile, "id" | "created_at" |
 // PROJECTS
 
 export async function getProjects(featured?: boolean) {
-  let query = await supabase
+  let query:any = await supabase
     .from("projects")
     .select("*")
     .order("order_index", { ascending: true });
@@ -83,8 +96,8 @@ export async function createProject(project: Omit<Project, "id" | "created_at">)
 export async function updateProject(id: string, updates: Partial<Omit<Project, "id">>){
     const { data, error } = await supabase 
         .from("projects")
-        .eq("id", id)
         .select()
+        .eq("id", id)
         .single();
 
     if (error) throw new Error(`Failed to update project: ${error.message}`);
@@ -160,7 +173,7 @@ export async function deleteExperience(id: string){
 // SKILLS
 
 export async function getSkills(category?: string) {
-    let query = await supabase
+    let query:any = await supabase
         .from("skills")
         .select("*")
         .order("order_index", { ascending: true })

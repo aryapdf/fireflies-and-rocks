@@ -1,12 +1,20 @@
 import { NextRequest } from "next/server";
-import { getProfile, updateProfile } from "@/lib/db/queries"
+import { getProfileById, getProfiles, updateProfile } from "@/lib/db/queries"
 import { updateProfileSchema } from "@/lib/validations/portfolio";
 import { successResponse, errorResponse, validationErrorResponse } from "@/lib/utils/api-response";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
-        const profile = await getProfile();
-        return successResponse(profile);
+        const { searchParams } = request.nextUrl;
+        const userId = searchParams.get("userId");
+
+        if (userId) {
+            const profile = await getProfileById(userId);
+            return successResponse(profile);
+        } 
+
+        const profiles = await getProfiles();
+        return successResponse(profiles);
     } catch (e: any) {
         console.error("Error fetching profiles :", e);
         return errorResponse(e.message || "Failed to fetch profiles")
