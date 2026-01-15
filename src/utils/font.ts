@@ -1,5 +1,6 @@
 // src/utils/fonts.ts
-import { Geist, Geist_Mono, Manrope, DotGothic16 } from "next/font/google";
+import { Geist, Geist_Mono, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 
 export const geistSans = Geist({
     subsets: ["latin"],
@@ -17,8 +18,8 @@ export const manrope = Manrope({
     weight: ["200", "300", "400", "500", "600", "700", "800"],
 });
 
-export const dotGothic16 = DotGothic16({
-    subsets: ["latin"],
+export const dotGothic16 = localFont({
+    src: "../../public/fonts/DotGothic16-Regular.ttf",
     variable: "--font-dot-gothic-16",
     weight: "400",
 });
