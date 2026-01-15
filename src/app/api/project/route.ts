@@ -27,7 +27,7 @@ export async function GET(request:NextRequest) {
 export async function POST(request:NextRequest) {
     try {
         const body = await request.json();
-        const validation = projectSchema.safeParse(body);
+        const validation:any = projectSchema.safeParse(body);
 
         if (!validation.success) {
             return validationErrorResponse(validation.error.format());
