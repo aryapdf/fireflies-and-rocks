@@ -6,22 +6,26 @@ import {
     errorResponse,
     validationErrorResponse,
 } from "@/lib/utils/api-response";
+import { handleApiError } from "@/lib/utils/handle-api-error";
 
 export async function GET(request: NextRequest) {
     try {
+        // /api/profile?userId=xxx  -> single
+        // /api/profile             -> list
+
         const { searchParams } = request.nextUrl;
         const userId = searchParams.get("userId");
 
         if (userId) {
             const profile = await getProfileById(userId);
+            if (!profile) return errorResponse("Profile not found.", 404);
             return successResponse(profile);
         }
 
         const profiles = await getProfiles();
         return successResponse(profiles);
-    } catch (e: any) {
-        console.error("Error fetching profiles :", e);
-        return errorResponse(e.message || "Failed to fetch profiles");
+    } catch (e) {
+        return handleApiError(e, "Failed to fetch profiles", 500);
     }
 }
 
@@ -32,15 +36,16 @@ export async function PUT(request: NextRequest) {
 
         if (!id) return errorResponse("Profile ID is required.", 400);
 
-        const validation: any = updateProfileSchema.safeParse(updates);
+        const validation = updateProfileSchema.strict().safeParse(updates);
         if (!validation.success) {
-            return validationErrorResponse(validation.error.format());
+            return validationErrorResponse(validation.error.flatten);
         }
 
         const profile = await updateProfile(id, validation.data);
+        if (!profile) return errorResponse("Profile not found.", 404);
+
         return successResponse(profile);
-    } catch (e: any) {
-        console.error("Error updating profile :", e);
-        return errorResponse(e.message || "Failed to update profile.");
+    } catch (e) {
+        return handleApiError(e, "Failed to update profile", 500);
     }
 }
